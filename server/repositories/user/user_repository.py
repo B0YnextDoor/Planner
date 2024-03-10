@@ -54,7 +54,7 @@ class UserRepository:
                 raise IntegrityError()
             return user
 
-    def upd_user_profile(self, new_name: str, new_email: str, id: int):
+    def upd_user_profile(self, new_name: str, new_email: str, new_password: str | None, id: int):
         with self.session_factory() as session:
             try:
                 db_user = session.query(User).filter(
@@ -63,6 +63,8 @@ class UserRepository:
                     return None
                 db_user.name = new_name
                 db_user.email = new_email
+                if new_password is not None:
+                    db_user.hashed_password = new_password
                 session.commit()
                 session.refresh(db_user)
             except IntegrityError:

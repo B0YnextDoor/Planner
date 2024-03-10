@@ -15,8 +15,9 @@ async def sign_up(user: SignUp, auth_service: AuthService = Depends(Provide[Cont
     access_token, refresh_token = auth_service.sign_up(
         user.name, user.email, user.password)
     if access_token is None:
-        raise DuplicatedError("User exists")
-    return auth_service.set_cookie(JSONResponse, access_token, refresh_token)
+        raise DuplicatedError(
+            "User with this email already exists!")
+    return auth_service.set_cookie(JSONResponse, access_token, refresh_token, True)
 
 
 @auth_router.post("/sign-in")
@@ -25,8 +26,8 @@ async def sign_in(user: SignIn, auth_service: AuthService = Depends(Provide[Cont
     access_token, refresh_token = auth_service.sign_in(
         user.email, user.password)
     if access_token is None:
-        raise AuthError(refresh_token)
-    return auth_service.set_cookie(JSONResponse, access_token, refresh_token)
+        raise AuthError('Wrong email or password!')
+    return auth_service.set_cookie(JSONResponse, access_token, refresh_token, True)
 
 
 @auth_router.post("/sign-out")

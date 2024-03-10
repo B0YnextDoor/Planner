@@ -8,7 +8,3 @@ class AchievementBase(BaseModel):
 class AchievementFull(AchievementBase):
     description: str
     title: str
-
-
-class AchievementAdd(AchievementBase):
-    access_token: str

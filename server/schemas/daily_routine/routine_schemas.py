@@ -1,15 +1,15 @@
-from schemas.token.token_schemas import TokenBase
+from pydantic import BaseModel
 
 
-class UpdateOrder(TokenBase):
+class UpdateOrder(BaseModel):
     order: list[int]  # id of Habits
 
 
-class RoutineUpdate(TokenBase):
+class RoutineUpdate(BaseModel):
     sleep_time: str
 
 
-class HabitBase(TokenBase):
+class HabitBase(BaseModel):
     id: int
 
 
@@ -19,5 +19,5 @@ class HabitUpdate(HabitBase):
     color: str
 
 
-class BuyUserPro(TokenBase):
+class BuyUserPro(BaseModel):
     pro_code: str

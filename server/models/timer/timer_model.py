@@ -22,12 +22,14 @@ class Timer(BaseModel):
 class TimerRound(BaseModel):
     __tablename__ = "timer_rounds"
 
-    def __init__(self, timer_id, curr_lap=0, total_seconds=0, is_completed=False):
+    def __init__(self, timer_id, curr_lap=0, total_work_seconds=30*60, total_rest_seconds=8*60):
         self.timer_id = timer_id
         self.curr_lap = curr_lap
-        self.total_seconds = total_seconds
+        self.total_work_seconds = total_work_seconds
+        self.total_rest_seconds = total_rest_seconds
 
-    total_seconds = Column(Integer, default=0)
+    total_work_seconds = Column(Integer, default=30*60)
+    total_rest_seconds = Column(Integer, default=8*60)
     curr_lap = Column(Integer, default=0)
     timer_id = Column(Integer, ForeignKey(
         'timers.id', ondelete="CASCADE", onupdate="CASCADE"))

@@ -1,7 +1,7 @@
-from schemas.token.token_schemas import TokenBase
+from pydantic import BaseModel
 
 
-class JoinOrganisation(TokenBase):
+class JoinOrganisation(BaseModel):
     invite_code: str  # org head refresh token
 
 
@@ -9,10 +9,10 @@ class InviteUser(JoinOrganisation):
     email: str
 
 
-class DeleteMember(TokenBase):
+class DeleteMember(BaseModel):
     member_id: int
 
 
-class OrganisationSettings(TokenBase):
+class OrganisationSettings(BaseModel):
     name: str
     description: str

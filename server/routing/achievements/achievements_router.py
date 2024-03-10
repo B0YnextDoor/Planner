@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Cookie, Depends
 from fastapi.responses import JSONResponse
 from dependency_injector.wiring import inject, Provide
 from container.container import Container
 from core.server_exceptions import NotFoundError, ValidationError
-from schemas.achievement.achievement_schemas import AchievementAdd
+from schemas.achievement.achievement_schemas import AchievementBase
 from services.achievements.achievements_service import AchievementsService
 
 
@@ -19,10 +19,11 @@ async def get_all_achievements(achievements_service: AchievementsService
 
 @achievements_router.post('/add-to-user')
 @inject
-async def add_to_user(data: AchievementAdd, achievements_service: AchievementsService
-                      = Depends(Provide[Container.achievements_service])):
+async def add_to_user(data: AchievementBase,
+                      access_token: str | None = Cookie(default=None),
+                      achievements_service: AchievementsService = Depends(Provide[Container.achievements_service])):
     response = achievements_service.add_to_user(
-        data.access_token, data.rules_to_achive)
+        access_token, data.rules_to_achive)
     if response is None:
         raise NotFoundError('user not found')
     if response == "no-achivement":

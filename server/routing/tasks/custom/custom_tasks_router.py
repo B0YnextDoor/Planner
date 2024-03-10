@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Cookie, Depends
 from core.server_exceptions import NotFoundError, ValidationError
 from dependency_injector.wiring import inject, Provide
 from fastapi.responses import JSONResponse
 from container.container import Container
 from schemas.tasks.custom.custom_task_schemas import CustomTaskDel, CustomTaskInfo, CustomTaskUpd
-from schemas.token.token_schemas import TokenBase
 from services.tasks.custom.custom_task_service import CustomTaskService
 
 
@@ -32,25 +31,32 @@ async def get_all(custom_task_service: CustomTaskService = Depends(Provide[Conta
 
 @custom_tasks_router.post("/user")
 @inject
-async def get_user_tasks(token: TokenBase, custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
-    return ReturnResponse(custom_task_service.get_user_custom(token.access_token))
+async def get_user_tasks(access_token: str | None = Cookie(default=None),
+                         custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
+    return ReturnResponse(custom_task_service.get_user_custom(access_token))
 
 
 @custom_tasks_router.post("/add")
 @inject
-async def create_custom_task(task: CustomTaskInfo, custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
+async def create_custom_task(task: CustomTaskInfo,
+                             access_token: str | None = Cookie(default=None),
+                             custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
     return ReturnResponse(custom_task_service.create_custom_task(task.description, task.priority, task.group_id,
-                                                                 task.access_token))
+                                                                 access_token))
 
 
 @custom_tasks_router.post("/upd")
 @inject
-async def update_custom_task(task: CustomTaskUpd, custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
+async def update_custom_task(task: CustomTaskUpd,
+                             access_token: str | None = Cookie(default=None),
+                             custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
     return ReturnResponse(custom_task_service.update_custom_task(task.category, task.description, task.priority,
-                                                                 task.group_id, task.task_id, task.access_token))
+                                                                 task.group_id, task.task_id, access_token))
 
 
 @custom_tasks_router.post("/del")
 @inject
-async def delete_custom_task(task: CustomTaskDel, custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
-    return ReturnResponse(custom_task_service.delete_custom_task(task.group_id, task.task_id, task.access_token))
+async def delete_custom_task(task: CustomTaskDel,
+                             access_token: str | None = Cookie(default=None),
+                             custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
+    return ReturnResponse(custom_task_service.delete_custom_task(task.group_id, task.task_id, access_token))

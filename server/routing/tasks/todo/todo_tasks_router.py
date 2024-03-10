@@ -1,11 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Cookie, Depends
 from core.server_exceptions import NotFoundError, ValidationError
 from dependency_injector.wiring import inject, Provide
 from fastapi.responses import JSONResponse
 from container.container import Container
 from schemas.tasks.task_schemas import DeleteTask
 from schemas.tasks.todo.todo_task_schemas import TodoInfo, TodoUpd
-from schemas.token.token_schemas import TokenBase
 from services.tasks.todo.todo_task_service import TodoTaskService
 
 
@@ -28,27 +27,30 @@ async def get_all(todo_tasks_service: TodoTaskService = Depends(Provide[Containe
 
 @todo_router.post("/user")
 @inject
-async def get_user_todo(token: TokenBase,
+async def get_user_todo(access_token: str | None = Cookie(default=None),
                         todo_task_service: TodoTaskService = Depends(Provide[Container.todo_tasks_sevice])):
-    return ReturnResponse(todo_task_service.get_user_todo(token.access_token))
+    return ReturnResponse(todo_task_service.get_user_todo(access_token))
 
 
 @todo_router.post("/add")
 @inject
 async def create_todo(task: TodoInfo,
+                      access_token: str | None = Cookie(default=None),
                       todo_task_service: TodoTaskService = Depends(Provide[Container.todo_tasks_sevice])):
-    return ReturnResponse(todo_task_service.create_todo(task.category, task.description, task.due_date, task.priority, task.access_token))
+    return ReturnResponse(todo_task_service.create_todo(task.category, task.description, task.due_date, task.priority, access_token))
 
 
 @todo_router.post("/upd")
 @inject
 async def upd_todo(task: TodoUpd,
+                   access_token: str | None = Cookie(default=None),
                    todo_task_service: TodoTaskService = Depends(Provide[Container.todo_tasks_sevice])):
-    return ReturnResponse(todo_task_service.upd_todo(task.category, task.description, task.due_date, task.priority, task.task_id, task.access_token))
+    return ReturnResponse(todo_task_service.upd_todo(task.category, task.description, task.due_date, task.priority, task.task_id, access_token))
 
 
 @todo_router.post("/del")
 @inject
 async def del_todo(task: DeleteTask,
+                   access_token: str | None = Cookie(default=None),
                    todo_task_service: TodoTaskService = Depends(Provide[Container.todo_tasks_sevice])):
-    return ReturnResponse(todo_task_service.del_todo(task.task_id, task.access_token))
+    return ReturnResponse(todo_task_service.del_todo(task.task_id, access_token))

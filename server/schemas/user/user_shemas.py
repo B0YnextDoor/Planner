@@ -10,11 +10,10 @@ class UserBase(BaseModel):
 
 class UserProfile(UserBase):
     name: str
-    access_token: str
 
 
 class UserCreate(UserProfile):
-    password: str
+    password: str | None
 
 
 class UserInfo(UserCreate):

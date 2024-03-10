@@ -1,11 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Cookie, Depends
 from dependency_injector.wiring import inject, Provide
 from fastapi.responses import JSONResponse
 from container.container import Container
 from core.server_exceptions import NotFoundError, ValidationError
 from schemas.tasks.kanban.kanban_task_schemas import KanbanUpd
 from schemas.tasks.task_schemas import DeleteTask, TaskInfo
-from schemas.token.token_schemas import TokenBase
 from services.tasks.kanban.kanban_task_service import KanbanTaskService
 
 
@@ -28,28 +27,31 @@ async def get_all(kanban_task_service: KanbanTaskService = Depends(Provide[Conta
 
 @kanban_router.post("/user")
 @inject
-async def get_user_todo(token: TokenBase,
+async def get_user_todo(access_token: str | None = Cookie(default=None),
                         kanban_task_service: KanbanTaskService = Depends(Provide[Container.kanban_tasks_service])):
-    return ReturnResponse(kanban_task_service.get_user_kanban(token.access_token))
+    return ReturnResponse(kanban_task_service.get_user_kanban(access_token))
 
 
 @kanban_router.post("/add")
 @inject
 async def create_todo(task: TaskInfo,
+                      access_token: str | None = Cookie(default=None),
                       kanban_task_service: KanbanTaskService = Depends(Provide[Container.kanban_tasks_service])):
     return ReturnResponse(kanban_task_service.create_kanban(task.category, task.description,
-                                                            task.priority, task.access_token))
+                                                            task.priority, access_token))
 
 
 @kanban_router.post("/upd")
 @inject
 async def upd_todo(task: KanbanUpd,
+                   access_token: str | None = Cookie(default=None),
                    kanban_task_service: KanbanTaskService = Depends(Provide[Container.kanban_tasks_service])):
-    return ReturnResponse(kanban_task_service.upd_kanban(task.category, task.description, task.priority, task.task_id, task.access_token))
+    return ReturnResponse(kanban_task_service.upd_kanban(task.category, task.description, task.priority, task.task_id, access_token))
 
 
 @kanban_router.post("/del")
 @inject
 async def del_todo(task: DeleteTask,
+                   access_token: str | None = Cookie(default=None),
                    kanban_task_service: KanbanTaskService = Depends(Provide[Container.kanban_tasks_service])):
-    return ReturnResponse(kanban_task_service.del_kanban(task.task_id, task.access_token))
+    return ReturnResponse(kanban_task_service.del_kanban(task.task_id, access_token))

@@ -1,0 +1,10 @@
+.container > form > div > div > span {
+	font-size: 16px;
+	color: #532fe0;
+	align-self: start;
+}
+
+.container > form > div > div > span::before {
+	display: inline;
+	content: '⚠ ';
+}
