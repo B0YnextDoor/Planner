@@ -1,7 +1,7 @@
-from schemas.token.token_schemas import TokenBase
+from pydantic import BaseModel
 
 
-class CustomTaskInfo(TokenBase):
+class CustomTaskInfo(BaseModel):
     description: str
     priority: str
     group_id: int
@@ -12,6 +12,6 @@ class CustomTaskUpd(CustomTaskInfo):
     task_id: int
 
 
-class CustomTaskDel(TokenBase):
+class CustomTaskDel(BaseModel):
     group_id: int
     task_id: int

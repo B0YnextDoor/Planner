@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 
-load_dotenv()
+# load_dotenv()
 
 
 class Configs(BaseSettings):
@@ -11,6 +11,7 @@ class Configs(BaseSettings):
     ENV: str = os.getenv("ENV", "dev")
     API: str = "/api"
     PROJECT_NAME: str = "planner"
+    DOMAIN: str = "localhost"
     ENV_DATABASE_MAPPER: dict = {
         "prod": "planner",
         "stage": "stage-planner",

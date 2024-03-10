@@ -1,7 +1,7 @@
-from schemas.token.token_schemas import TokenBase
+from pydantic import BaseModel
 
 
-class StatisticsInfo(TokenBase):
+class StatisticsInfo(BaseModel):
     amount_of_tasks: int
     finished_tasks: int
 

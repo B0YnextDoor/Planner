@@ -1,12 +1,11 @@
+from pydantic import BaseModel
 
-from schemas.token.token_schemas import TokenBase
 
-
-class TaskInfo(TokenBase):
+class TaskInfo(BaseModel):
     category: str
     description: str
     priority: str
 
 
-class DeleteTask(TokenBase):
+class DeleteTask(BaseModel):
     task_id: int

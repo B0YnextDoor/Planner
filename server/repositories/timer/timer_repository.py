@@ -49,7 +49,7 @@ class TimerRepository:
                 session.refresh(user_settings)
             except IntegrityError:
                 raise IntegrityError()
-            return user_settings
+            return 'Timer settings updated'
 
     def get_current_round(self, id: int):
         with self.session_factory() as session:
@@ -71,22 +71,28 @@ class TimerRepository:
                 timer = Timer(id)
                 session.add(timer)
                 session.commit()
-                self.create_timer_round(timer.id)
+                settings = session.query(TimerSettings).filter(
+                    TimerSettings.user_id == id).first()
+                if settings is None:
+                    return None
+                self.create_timer_round(
+                    timer.id, settings.work_interval, settings.rest_interval)
                 session.refresh(timer)
             except IntegrityError:
                 raise IntegrityError()
-            return timer,
+            return 'Timer created'
 
-    def create_timer_round(self, timer_id: int):
+    def create_timer_round(self, timer_id: int, work_interval: int, rest_interval: int):
         with self.session_factory() as session:
             timer = session.query(Timer).filter(
                 Timer.id == timer_id).first()
             if timer is None:
                 return "no-sess"
             if len(timer.rounds) > 0:
-                return self.upd_timer_round(timer.user_id, 0, 0)
+                return self.upd_timer_round(timer.user_id, 0, work_interval*60, rest_interval*60)
             try:
-                round = TimerRound(timer_id)
+                round = TimerRound(
+                    timer_id, total_work_seconds=work_interval*60, total_rest_seconds=rest_interval*60)
                 session.add(round)
                 session.commit()
                 session.refresh(round)
@@ -94,7 +100,7 @@ class TimerRepository:
                 raise IntegrityError()
             return round
 
-    def upd_timer_round(self, user_id: int, curr_lap: int, total_seconds: int):
+    def upd_timer_round(self, user_id: int, curr_lap: int, total_work_seconds: int, total_rest_seconds: int):
         with self.session_factory() as session:
             db_user = session.query(User).filter(User.id == user_id).first()
             if db_user is None:
@@ -105,12 +111,13 @@ class TimerRepository:
                 TimerRound.timer_id == db_user.timer[0].id).first()
             try:
                 round.curr_lap = curr_lap
-                round.total_seconds = total_seconds
+                round.total_work_seconds = total_work_seconds
+                round.total_rest_seconds = total_rest_seconds
                 session.commit()
                 session.refresh(round)
             except IntegrityError:
                 raise IntegrityError()
-            return round
+            return 'Round updated'
 
     def upd_timer_session(self, user_id: int, value: bool):
         with self.session_factory() as session:
@@ -125,9 +132,14 @@ class TimerRepository:
             try:
                 timer[0].is_completed = value
                 if value == True:
-                    self.upd_timer_round(user_id, 0, 0)
+                    settings = session.query(TimerSettings).filter(
+                        TimerSettings.user_id == user_id).first()
+                    if settings is None:
+                        return None
+                    self.upd_timer_round(
+                        user_id, 0, settings.work_interval, settings.rest_interval)
                 session.commit()
                 session.refresh(timer[0])
             except IntegrityError:
                 raise IntegrityError()
-            return timer[0]
+            return f'Session completed: {value}'

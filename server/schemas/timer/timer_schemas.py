@@ -1,18 +1,20 @@
 from pydantic import BaseModel
 
 
-class TimerSettings(BaseModel):
+class RoundInfo(BaseModel):
     work_interval: int
     rest_interval: int
+
+
+class TimerSettings(RoundInfo):
     laps_ammount: int
-    access_token: str
 
 
 class UpdateSession(BaseModel):
     is_completed: bool
-    access_token: str
 
 
 class CurrentSession(UpdateSession):
     current_lap: int
-    total_seconds: int
+    total_work_seconds: int
+    total_rest_seconds: int

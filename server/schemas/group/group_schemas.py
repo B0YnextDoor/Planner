@@ -1,7 +1,7 @@
-from schemas.token.token_schemas import TokenBase
+from pydantic import BaseModel
 
 
-class GroupInfo(TokenBase):
+class GroupInfo(BaseModel):
     group_name: str
     parent_group_id: int
 
@@ -11,5 +11,5 @@ class GroupUpd(GroupInfo):
     group_id: int
 
 
-class GroupDel(TokenBase):
+class GroupDel(BaseModel):
     group_id: int
