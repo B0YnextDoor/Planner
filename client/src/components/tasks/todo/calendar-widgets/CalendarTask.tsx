@@ -1,11 +1,9 @@
 import cn from 'clsx'
-import { GripVertical, Loader, Trash } from 'lucide-react'
-import { Dispatch, SetStateAction, useMemo } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Loader, Trash } from 'lucide-react'
+import { Dispatch, SetStateAction } from 'react'
+import { useForm } from 'react-hook-form'
 
-import { Checkbox } from '@/components/ui/checkbox/Checkbox'
 import { TransparentInput } from '@/components/ui/input/TransparentInput'
-import { Select } from '@/components/ui/select/Select'
 
 import { ITodoTask, TypeTodoForm } from '@/types/tasks/todo/todo.types'
 
