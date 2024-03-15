@@ -9,5 +9,5 @@ export interface IUserProfile extends IUserBase {
 }
 
 export interface IUpdUserProfile extends IUserBase {
-	password: string
+	password: string | null
 }

@@ -18,7 +18,6 @@ export const timerService = {
 
 	async currentSession() {
 		return await userApi.post<IRoundInfo>(`${this.TIMER_URL}current`)
-		// if (response.status == 200) return response
 	},
 
 	async updateRound(data: IRoundInfo) {

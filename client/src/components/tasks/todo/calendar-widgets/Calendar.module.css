@@ -1,0 +1,63 @@
+.calendar {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 10px;
+	padding: 5px 10px;
+}
+
+.calendarDay {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #1a1c1c;
+	padding: 20px 3px 0px 3px;
+	border-radius: 8px;
+	min-height: 150px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendarTask {
+	@apply font-normal grid grid-cols-[1fr_.15fr] gap-1 relative text-[16px] bg-[#282929] rounded-lg mt-1;
+}
+
+.calendarTask.high {
+	@apply bg-red-500;
+}
+
+.calendarTask.medium {
+	@apply bg-orange-400;
+}
+
+.calendarTask.low {
+	@apply bg-navy-100;
+}
+
+.calendarTask.completed {
+	@apply border border-primary;
+}
+
+.calendarTask.completed > div > span > input {
+	@apply italic line-through opacity-50;
+}
+
+.calendarTask.overdued {
+	@apply border border-red-600;
+}
+
+.calendarTask.overdued > div > span > span {
+	@apply text-red-600 font-semibold;
+}
+
+.calendarTask:hover {
+	@apply bg-[#393939];
+}
+
+.grip {
+	@apply opacity-20 transition-opacity -ml-3 -mr-1;
+}
+
+.grip:hover,
+.grip:active {
+	@apply opacity-100;
+}

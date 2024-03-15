@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ITimerState } from '@/types/timer/timer.types'
 
@@ -13,6 +13,7 @@ export const useCurrentSession = ({
 	setActiveRound,
 	setSecondsLeft
 }: ITimerState) => {
+	const [isActive, setIsActive] = useState<boolean>(false)
 	const { work_interval } = useTimerSettings()
 	const {
 		data: session,
@@ -20,25 +21,25 @@ export const useCurrentSession = ({
 		isSuccess
 	} = useQuery({
 		queryKey: ['current session'],
-		queryFn: () => timerService.currentSession()
+		queryFn: () => timerService.currentSession(),
+		retry: 0
 	})
 	useEffect(() => {
+		setIsActive(false)
 		if (isSuccess && session) {
 			setActiveRound(session.data.current_lap)
 			setSecondsLeft(
-				(isBreakTime
+				isBreakTime
 					? session.data.total_rest_seconds
-					: session.data.total_work_seconds) * 60
+					: session.data.total_work_seconds
 			)
-			for (var i = 0; i < rounds.length; ++i) {
-				if (i < session.data.current_lap) {
-					rounds[i].is_completed = true
-					rounds[i].is_work = true
-				}
+			for (var i = 0; i < session.data.current_lap; ++i) {
+				rounds[i] = { is_work: true, is_active: false, is_completed: true }
 			}
 			setRounds(rounds)
+			setIsActive(true)
 		}
 	}, [isSuccess, session])
 
-	return { session, isLoading, work_interval }
+	return { session, isLoading, work_interval, isActive }
 }

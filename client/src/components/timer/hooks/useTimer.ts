@@ -52,9 +52,10 @@ export function useTimer(): ITimerState {
 		secondsLeft,
 		activeRound,
 		isBreakTime,
+		setRounds,
+		setIsBreakTime,
 		setIsRunning,
 		setSecondsLeft,
-		setActiveRound,
-		setRounds
+		setActiveRound
 	}
 }

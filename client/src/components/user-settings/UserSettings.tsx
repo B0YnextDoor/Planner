@@ -27,7 +27,11 @@ export const UserSettings = () => {
 	const { isPending, mutate } = useUpdateSettings()
 
 	const onSubmit: SubmitHandler<IUserSettings> = data => {
-		mutate(data)
+		const { password, ...rest } = data
+		mutate({
+			...rest,
+			password: password ? password : null
+		})
 	}
 
 	return (
