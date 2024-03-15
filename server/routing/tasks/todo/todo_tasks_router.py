@@ -10,9 +10,9 @@ from services.tasks.todo.todo_task_service import TodoTaskService
 
 def ReturnResponse(response):
     if response is None:
-        return NotFoundError('user not found')
+        raise NotFoundError('user not found')
     elif response == 'no task':
-        return ValidationError('task not found')
+        raise ValidationError('task not found')
     return response
 
 
