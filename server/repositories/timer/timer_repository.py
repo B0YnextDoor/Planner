@@ -137,7 +137,7 @@ class TimerRepository:
                     if settings is None:
                         return None
                     self.upd_timer_round(
-                        user_id, 0, settings.work_interval, settings.rest_interval)
+                        user_id, 0, settings.work_interval*60, settings.rest_interval*60)
                 session.commit()
                 session.refresh(timer[0])
             except IntegrityError:

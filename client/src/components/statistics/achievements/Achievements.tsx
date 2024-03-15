@@ -19,7 +19,7 @@ export const Achievements = () => {
 					data.map((achieve, id) => (
 						<div
 							key={id}
-							className='flex flex-col w-auto text-xs mb-2 bg-horizonPurple-700 rounded-xl p-5 hover:-translate-y-2 transition-transform duration-500'
+							className='flex flex-col w-auto text-xs mb-2 mr-2 bg-horizonPurple-700 rounded-xl p-5 hover:-translate-y-2 transition-transform duration-500'
 						>
 							{achieve.title}
 							<span className='text-xs opacity-50 font-normal italic'>

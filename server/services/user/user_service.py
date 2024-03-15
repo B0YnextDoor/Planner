@@ -16,7 +16,7 @@ class UserService(BaseService):
         return self.user_repository.del_all()
 
     def del_by_id(self, token: str) -> None:
-        return self.user_repository.del_by_id(token)
+        return self.user_repository.del_by_id(int(token))
 
     def get_all(self) -> List[User]:
         return self.user_repository.get_all()

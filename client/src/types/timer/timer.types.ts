@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios'
 import { Dispatch, SetStateAction } from 'react'
 
 export interface IRoundInfo {
@@ -27,8 +28,13 @@ export interface ITimerState {
 	activeRound: number
 	isBreakTime: boolean
 
+	setIsBreakTime: Dispatch<SetStateAction<boolean>>
 	setIsRunning: Dispatch<SetStateAction<boolean>>
 	setSecondsLeft: Dispatch<SetStateAction<number>>
 	setActiveRound: Dispatch<SetStateAction<number>>
 	setRounds: Dispatch<SetStateAction<IRound[]>>
+}
+
+export interface IActionType extends ITimerState {
+	session: AxiosResponse<IRoundInfo, any> | undefined
 }

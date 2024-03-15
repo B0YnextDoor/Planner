@@ -1,0 +1,23 @@
+.text {
+	position: relative;
+}
+
+.text::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.text::before {
+	background: black;
+	animation: typewriter 5s steps(11) infinite;
+}
+
+@keyframes typewriter {
+	to {
+		left: 100%;
+	}
+}

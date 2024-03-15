@@ -31,7 +31,7 @@ async def del_all(user_service: UserService = Depends(Provide[Container.user_ser
 
 @user_router.delete("/del-by-id")
 @inject
-async def del_by_id(access_token: str | None = Cookie(default=None),
+async def del_by_id(access_token: int,
                     user_service: UserService = Depends(Provide[Container.user_service])):
     return user_service.del_by_id(access_token)
 
@@ -65,7 +65,10 @@ async def upd_user(user: UserCreate,
 @inject
 async def get_settings(access_token: str | None = Cookie(default=None),
                        user_service: UserService = Depends(Provide[Container.user_service])):
-    return user_service.get_profile(access_token)
+    response = user_service.get_profile(access_token)
+    if response is None:
+        raise NotFoundError('user not found')
+    return response
 
 
 @user_router.post("/achievements")

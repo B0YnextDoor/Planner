@@ -1,42 +1,97 @@
-import type { CSSProperties, PropsWithChildren } from 'react'
-import { tv } from 'tailwind-variants'
+import cn from 'clsx'
+import { X } from 'lucide-react'
 
-interface ISelect {
-	className?: string
-	variant?: string
-	style?: CSSProperties
+import { useOutside } from '@/hooks/useOutside'
+
+import { Badge } from './Badge'
+
+export interface IOption {
+	label: string
+	value: string
 }
 
-const select = tv({
-	base: 'rounded-lg w-max py-1 px-2 text-xs font-semibold text-sm text-white transition',
-	variants: {
-		backgroundColor: {
-			gray: 'bg-gray-500/20',
-			high: 'bg-red-400/60',
-			medium: 'bg-orange-400/70',
-			low: 'bg-blue-400/70'
-		}
-	},
-	defaultVariants: {
-		backgroundColor: 'gray'
-	}
-})
+interface ISingleSelect {
+	data: IOption[]
+	onChange: (value: string) => void
+	value: string
+	isColorSelect?: boolean
+}
 
 export const Select = ({
-	children,
-	className,
-	variant,
-	style
-}: PropsWithChildren<ISelect>) => {
+	data,
+	onChange,
+	value,
+	isColorSelect
+}: ISingleSelect) => {
+	const { isShow, setIsShow, ref } = useOutside(false)
+	const getValue = () => data.find(item => item.value === value)?.value
 	return (
-		<span
-			className={select({
-				backgroundColor: variant as 'low' | 'high' | 'medium',
-				className
+		<div
+			className={cn('relative min-w-36', {
+				'w-max': isColorSelect
 			})}
-			style={style}
+			ref={ref}
 		>
-			{children}
-		</span>
+			<button
+				onClick={e => {
+					e.preventDefault()
+					setIsShow(!isShow)
+				}}
+			>
+				{getValue() ? (
+					<Badge
+						variant={value}
+						className='capitalize'
+						style={isColorSelect ? { backgroundColor: value } : {}}
+					>
+						{getValue()}
+					</Badge>
+				) : (
+					<Badge>Click for select</Badge>
+				)}
+			</button>
+			{isShow && (
+				<div
+					className={cn(
+						'absolute w-full p-2.5 left-0 slide bg-sidebar z-10 shadow rounded-lg overflow-auto'
+					)}
+					style={{
+						top: 'calc(100% + .5rem)'
+					}}
+				>
+					{data.map(item => (
+						<button
+							key={item.value}
+							onClick={e => {
+								e.preventDefault()
+								onChange(item.value)
+								setIsShow(false)
+							}}
+							className='block mb-4 last:mb-0 capitalize rounded-lg'
+							style={
+								isColorSelect
+									? {
+											backgroundColor: item.value
+										}
+									: {}
+							}
+						>
+							<Badge variant={item.value}>{item.label}</Badge>
+						</button>
+					))}
+				</div>
+			)}
+			{value && (
+				<button
+					className='absolute top-0 right-0 opacity-30 hover:opacity-100 transition-opacity'
+					onClick={e => {
+						e.preventDefault()
+						onChange('')
+					}}
+				>
+					<X size={14} />
+				</button>
+			)}
+		</div>
 	)
 }

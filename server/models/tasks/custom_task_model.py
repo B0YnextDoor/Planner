@@ -12,13 +12,11 @@ class CustomTask(BaseModel):
     def __init__(self, description: str, priority, group_id):
         self.category = "todo"
         self.description = description
-        self.time_created = datetime.datetime.now().isoformat()
         self.priority = priority
         self.group_id = group_id
 
     category = Column(String, default="todo")
     description = Column(String)
-    time_created = Column(String)
     priority = Column(String, default="low")
     group_id = Column(Integer, ForeignKey(
         'custom_tasks_group.id', ondelete="CASCADE", onupdate="CASCADE"))

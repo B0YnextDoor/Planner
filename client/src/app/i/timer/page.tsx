@@ -6,7 +6,7 @@ import { Heading } from '@/components/ui/heading/Heading'
 import { NO_INDEX_PAGE } from '@/constants/seo.constants'
 
 export const metadata: Metadata = {
-	title: 'Pomodoro',
+	title: 'Timer',
 	...NO_INDEX_PAGE
 }
 

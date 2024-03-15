@@ -10,6 +10,7 @@ export const useUpdateSettings = () => {
 	const queryClient = useQueryClient()
 
 	const handleMutation = async (data: IUserSettings) => {
+		console.log(data)
 		return await userService
 			.updProfile({
 				name: data.name,

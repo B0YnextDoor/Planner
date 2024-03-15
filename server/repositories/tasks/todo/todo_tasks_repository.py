@@ -1,6 +1,5 @@
-from asyncio import log
 from contextlib import AbstractContextManager
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy.exc import IntegrityError
 from typing import Callable
 from sqlalchemy.orm import Session
@@ -24,20 +23,20 @@ class TodoTaskRepository:
             todo_tasks = session.query(TodoTask).filter(
                 TodoTask.user_id == user_id).all()
             for todo in todo_tasks:
-                due_time = datetime.strptime(
-                    todo.due_date, "%Y-%m-%dT%H:%M:%S.%fZ")
-                print(due_time)
-                if todo.category != "finished" and due_time < datetime.now():
+                due_time = datetime.fromisoformat(todo.due_date)
+                if todo.category != "overdued" and todo.category != "finished" \
+                        and due_time + timedelta(days=1) < datetime.now(timezone(timedelta(hours=3))):
                     todo.time_overdue = (
-                        datetime.now() - due_time).total_seconds() + 3600
+                        datetime.now(timezone(timedelta(hours=3))) - due_time).total_seconds() + 3600
                     todo.category = "overdued"
+                    todo.priority = 'high'
                     db_user.statistics[0].amount_of_tasks -= 1
                     db_user.statistics[0].overdued_tasks += 1
             session.commit()
             return session.query(TodoTask).filter(TodoTask.user_id == user_id).all()
 
-    def create_todo(self, category: str, description: str, due_date: str,
-                    priority: str, user_id: int):
+    def create_todo(self, category: str, description: str, due_date: str | None,
+                    priority: str | None, user_id: int):
         with self.session_factory() as session:
             try:
                 db_user = session.query(User).filter(
@@ -48,13 +47,17 @@ class TodoTaskRepository:
                                 due_date, priority, user_id)
                 session.add(todo)
                 db_user.statistics[0].amount_of_tasks += 1
+                if (db_user.statistics[0].amount_of_tasks == 10 and 4 not in db_user.achievements):
+                    db_user.achievements[4] = ""
+                if (db_user.statistics[0].amount_of_tasks == 50 and 5 not in db_user.achievements):
+                    db_user.achievements[5] = ""
                 session.commit()
                 session.refresh(todo)
             except IntegrityError:
                 IntegrityError()
-            return todo
+            return 'Task created'
 
-    def upd_todo(self, category: str, description: str, due_date: str, priority: str, task_id: int, user_id: int):
+    def upd_todo(self, category: str, description: str | None, due_date: str | None, priority: str | None, task_id: int, user_id: int):
         with self.session_factory() as session:
             try:
                 db_user = session.query(User).filter(
@@ -66,17 +69,33 @@ class TodoTaskRepository:
                 if todo is None:
                     return 'no task'
                 if category == 'finished':
-                    db_user.statistics[0].amount_of_tasks -= 1
                     db_user.statistics[0].finished_tasks += 1
+                    if todo.category == 'overdued':
+                        db_user.statistics[0].overdued_tasks -= 1
+                    else:
+                        db_user.statistics[0].amount_of_tasks -= 1
+                elif category != 'overdued' and (todo.category == 'finished' or todo.category == 'overdued'):
+                    db_user.statistics[0].amount_of_tasks += 1
+                    if todo.category == 'overdued':
+                        db_user.statistics[0].overdued_tasks -= 1
+                if (db_user.statistics[0].finished_tasks == 1 and 6 not in db_user.achievements):
+                    db_user.achievements[6] = ""
+                if (db_user.statistics[0].finished_tasks == 10 and 7 not in db_user.achievements):
+                    db_user.achievements[7] = ""
+                if (db_user.statistics[0].finished_tasks == 50 and 8 not in db_user.achievements):
+                    db_user.achievements[8] = ""
                 todo.category = category
-                todo.description = description
-                todo.due_date = due_date
-                todo.priority = priority
+                if (description is not None):
+                    todo.description = description
+                if (due_date is not None):
+                    todo.due_date = due_date
+                if (priority is not None):
+                    todo.priority = priority
                 session.commit()
                 session.refresh(todo)
             except IntegrityError:
                 IntegrityError()
-            return todo
+            return 'Task updated'
 
     def del_todo(self, user_id: int, task_id: int):
         with self.session_factory() as session:
@@ -89,11 +108,9 @@ class TodoTaskRepository:
                     TodoTask.user_id == user_id, TodoTask.id == task_id).first()
                 if todo is None:
                     return 'no task'
-                if todo.category == 'finished':
-                    db_user.statistics[0].finished_tasks -= 1
-                elif todo.category == 'overdued':
+                if todo.category == "overdued":
                     db_user.statistics[0].overdued_tasks -= 1
-                else:
+                elif todo.category != "finished":
                     db_user.statistics[0].amount_of_tasks -= 1
                 session.delete(todo)
                 session.commit()

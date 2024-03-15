@@ -7,5 +7,5 @@ export interface ITimerSettings {
 export interface IUserSettings extends ITimerSettings {
 	name: string
 	email: string
-	password: string
+	password: string | null
 }

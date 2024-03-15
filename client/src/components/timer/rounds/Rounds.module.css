@@ -11,7 +11,7 @@
 }
 
 .round {
-	@apply rounded border border-gray-800 w-5 h-5 relative;
+	@apply rounded border border-gray-800 w-8 h-8 relative;
 }
 
 .round::before {
@@ -27,6 +27,11 @@
 .round.active::before {
 	@apply duration-1000;
 	width: 40%;
+}
+
+.round.work::before {
+	@apply duration-1000;
+	width: 70%;
 }
 
 .round.completed::before {

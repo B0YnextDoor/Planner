@@ -3,8 +3,8 @@ from pydantic import BaseModel
 
 class TaskInfo(BaseModel):
     category: str
-    description: str
-    priority: str
+    description: str | None
+    priority: str | None
 
 
 class DeleteTask(BaseModel):

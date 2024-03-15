@@ -11,8 +11,8 @@ export const SignUp: React.FC<any> = ({ mutate, setLogin }) => {
 	} = useForm<ISignUpForm>({
 		mode: 'onChange'
 	})
-	const onSubmit: SubmitHandler<ISignUpForm> = data => {
-		mutate(data)
+	const onSubmit: SubmitHandler<ISignUpForm> = async data => {
+		await mutate(data)
 		reset()
 	}
 	return (

@@ -1,4 +1,11 @@
-import { KanbanSquare, LayoutDashboard, Settings, Timer } from 'lucide-react'
+import {
+	ClipboardList,
+	KanbanSquare,
+	LayoutDashboard,
+	ListTodo,
+	Settings,
+	Timer
+} from 'lucide-react'
 
 import { IMenuItem } from '@/types/sidebar/menu_item.type'
 
@@ -11,16 +18,29 @@ export const MENU: IMenuItem[] = [
 		name: 'Dashboard',
 		is_pro: false
 	},
-	// {
-	// 	icon: KanbanSquare,
-	// 	link: DASHBOARD_PAGES.TASKS,
-	// 	name: 'Tasks'
-	// },
+	{
+		icon: KanbanSquare,
+		link: DASHBOARD_PAGES.TASKS,
+		name: 'Tasks',
+		is_pro: false
+	},
+	{
+		icon: ClipboardList,
+		link: DASHBOARD_PAGES.GROUPS,
+		name: 'Task Groups',
+		is_pro: false
+	},
 	{
 		icon: Timer,
 		link: DASHBOARD_PAGES.TIMER,
 		name: 'Pomodoro',
 		is_pro: false
+	},
+	{
+		icon: ListTodo,
+		link: DASHBOARD_PAGES.HABITS,
+		name: 'Routine',
+		is_pro: true
 	},
 	{
 		icon: Settings,
