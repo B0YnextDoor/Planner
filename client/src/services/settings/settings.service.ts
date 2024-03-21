@@ -4,7 +4,6 @@ import { userApi } from '@/api/interceptors'
 
 export const settingsService = {
 	TIMER_URL: '/timer/',
-	ORGANISATION_URL: '',
 
 	async getTimerSettings() {
 		const response = await userApi.post<ITimerSettings>(

@@ -7,19 +7,18 @@ import { TypeTodoForm } from '@/types/tasks/todo/todo.types'
 import { useCreateTodo } from './useCreateTodo'
 import { useUpdateTodo } from './useUpdateTodo'
 
-interface IUseTaskDebounce {
+interface IUseTodoDebounce {
 	watch: UseFormWatch<TypeTodoForm>
 	id: number | undefined
-	category: string
 }
 
-export const useTodoListener = ({ watch, id, category }: IUseTaskDebounce) => {
+export const useTodoListener = ({ watch, id }: IUseTodoDebounce) => {
 	const { createTask } = useCreateTodo()
-	const { updateTask } = useUpdateTodo()
+	const { updateTask } = useUpdateTodo(String(id))
 
 	const debouncedCreateTask = useCallback(
 		debounce((data: TypeTodoForm) => {
-			createTask({ ...data, category: category })
+			createTask({ ...data, category: 'active' })
 		}, 1000),
 		[id]
 	)

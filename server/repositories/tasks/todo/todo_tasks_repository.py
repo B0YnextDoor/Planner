@@ -68,7 +68,7 @@ class TodoTaskRepository:
                     TodoTask.user_id == user_id, TodoTask.id == task_id).first()
                 if todo is None:
                     return 'no task'
-                if category == 'finished':
+                if category == 'finished' and todo.category != 'finished':
                     db_user.statistics[0].finished_tasks += 1
                     if todo.category == 'overdued':
                         db_user.statistics[0].overdued_tasks -= 1
@@ -78,6 +78,8 @@ class TodoTaskRepository:
                     db_user.statistics[0].amount_of_tasks += 1
                     if todo.category == 'overdued':
                         db_user.statistics[0].overdued_tasks -= 1
+                    else:
+                        db_user.statistics[0].finished_tasks -= 1
                 if (db_user.statistics[0].finished_tasks == 1 and 6 not in db_user.achievements):
                     db_user.achievements[6] = ""
                 if (db_user.statistics[0].finished_tasks == 10 and 7 not in db_user.achievements):

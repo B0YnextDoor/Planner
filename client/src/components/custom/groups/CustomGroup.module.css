@@ -1,0 +1,20 @@
+.group {
+	@apply flex flex-col mt-[15px] z-[3] cursor-pointer whitespace-nowrap relative w-3/5 gap-2;
+}
+
+.groupHeading {
+	@apply hover:bg-transparent bg-[#1a1b1b] w-full pl-4 flex items-center justify-between rounded-lg h-[50px] border border-border;
+}
+
+.groupHeading > div > div > button {
+	@apply opacity-50 transition-opacity hover:opacity-100;
+}
+
+.grip {
+	@apply opacity-20 transition-opacity -ml-3 -mr-1;
+}
+
+.grip:hover,
+.grip:active {
+	@apply opacity-100;
+}

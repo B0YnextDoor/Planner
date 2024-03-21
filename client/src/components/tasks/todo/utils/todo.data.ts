@@ -17,10 +17,6 @@ export const FILTERS: Record<string, Dayjs> = {
 
 export const CATEGORIES = [
 	{
-		label: 'Overdued',
-		id: 'overdued'
-	},
-	{
 		label: 'Today',
 		id: 'today'
 	},

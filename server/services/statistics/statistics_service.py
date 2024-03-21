@@ -25,7 +25,14 @@ class StatisticsService:
 
     def get_organisation_stat(self, token: str):
         user = decode_token(token)
-        return self.statistics_repository.get_organisation_stat(user.get('user')) if user is not None else None
+        if user is None:
+            return None
+        response = self.statistics_repository.get_organisation_stat(
+            user.get('user'))
+        if response is None or type(response) == str:
+            return response
+        return {'ammount_of_tasks': response.amount_of_tasks,
+                'finished_tasks': response.finished_tasks}
 
     def upd_user_stat(self, token: str, amount_of_tasks: int, finished_tasks: int, overdued_tasks: int):
         user = decode_token(token)

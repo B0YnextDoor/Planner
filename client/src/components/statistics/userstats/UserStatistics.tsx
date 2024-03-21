@@ -10,7 +10,7 @@ export const UserStatistics = () => {
 		queryFn: () => statService.userStat()
 	})
 	return isLoading ? (
-		<Loader />
+		<Loader size={20} />
 	) : (
 		<div className='grid grid-cols-2 grid-rows-2 gap-12 mt-7 px-4'>
 			{data ? (

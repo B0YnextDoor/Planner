@@ -10,13 +10,13 @@ from services.tasks.organisation.organisation_tasks_service import OrganisationT
 
 def ReturnResponse(response):
     if response is None:
-        return NotFoundError('user not found')
+        raise NotFoundError('user not found')
     elif response == 'no task':
-        return ValidationError('task not found')
+        raise ValidationError('task not found')
     elif response == 'no org':
-        return ValidationError('organisation not found')
+        raise ValidationError('organisation not found')
     elif response == 'not head':
-        return ValidationError('not head of organosation')
+        raise ValidationError('not head of organosation')
     return response
 
 

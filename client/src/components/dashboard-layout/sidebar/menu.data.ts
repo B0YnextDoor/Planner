@@ -1,4 +1,5 @@
 import {
+	Building2,
 	ClipboardList,
 	KanbanSquare,
 	LayoutDashboard,
@@ -7,7 +8,7 @@ import {
 	Timer
 } from 'lucide-react'
 
-import { IMenuItem } from '@/types/sidebar/menu_item.type'
+import { IMenuItem } from '@/types/ui/sidebar/menu_item.type'
 
 import { DASHBOARD_PAGES } from '@/config/pages-url.config'
 
@@ -31,6 +32,12 @@ export const MENU: IMenuItem[] = [
 		is_pro: false
 	},
 	{
+		icon: Building2,
+		link: DASHBOARD_PAGES.ORGANISATION,
+		name: 'Organisation',
+		is_pro: false
+	},
+	{
 		icon: Timer,
 		link: DASHBOARD_PAGES.TIMER,
 		name: 'Pomodoro',
@@ -38,7 +45,7 @@ export const MENU: IMenuItem[] = [
 	},
 	{
 		icon: ListTodo,
-		link: DASHBOARD_PAGES.HABITS,
+		link: DASHBOARD_PAGES.ROUTINE,
 		name: 'Routine',
 		is_pro: true
 	},

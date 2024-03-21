@@ -36,7 +36,7 @@ class RoutineRepository:
                 session.refresh(db_user)
             except IntegrityError:
                 raise IntegrityError()
-            return db_user
+            return 'Success'
 
     def get_user_routine(self, id: int):
         with self.session_factory() as session:
@@ -51,11 +51,12 @@ class RoutineRepository:
         with self.session_factory() as session:
             db_user = session.query(User).filter(User.id == id).first()
             if db_user is None or db_user.is_pro == False:
-                return None
+                return None, None
             if len(db_user.routine) == 0 or db_user.routine[0].habits is None or len(db_user.routine[0].habits) == 0:
-                return 'no-routine'
+                return 'no-routine', None
             return session.query(Habit).filter(
-                Habit.routine_id == db_user.routine[0].id).order_by(Habit.order.asc()).all()
+                Habit.routine_id == db_user.routine[0].id).order_by(Habit.order.asc()).all(), \
+                db_user.routine[0].sleep_time
 
     def create_user_habit(self, user_id: int, name: str, duration: int, color: str):
         with self.session_factory() as session:
@@ -66,7 +67,7 @@ class RoutineRepository:
                     return None
                 elif len(db_user.routine) == 0:
                     return 'no-routine'
-                elif db_user.routine[0].sleep_time - duration < 300:
+                elif db_user.routine[0].sleep_time - duration < 0:
                     return 'no-time'
                 habit = Habit(name, duration, color, db_user.routine[0].id)
                 session.add(habit)
@@ -75,7 +76,7 @@ class RoutineRepository:
                 session.refresh(habit)
             except IntegrityError:
                 raise IntegrityError()
-            return habit
+            return 'Habit created'
 
     def upd_user_routine(self, user_id: int):
         with self.session_factory() as session:
@@ -95,7 +96,7 @@ class RoutineRepository:
                 session.refresh(db_user.routine[0])
             except IntegrityError:
                 raise IntegrityError()
-            return db_user.routine[0]
+            return 'Routine updated'
 
     def upd_habits_order(self, user_id: int, order: list[int]):
         with self.session_factory() as session:
@@ -116,7 +117,7 @@ class RoutineRepository:
                 session.refresh(db_user)
             except IntegrityError:
                 raise IntegrityError()
-            return self.get_user_habits(user_id)
+            return 'Order updated'
 
     def upd_user_habbit(self, user_id: int, id: int, name: str, duration: int, color: str):
         with self.session_factory() as session:
@@ -138,7 +139,7 @@ class RoutineRepository:
                 session.refresh(habit)
             except IntegrityError:
                 raise IntegrityError()
-            return habit
+            return 'Habit updated'
 
     def del_user_habit(self, user_id: int, id: int):
         with self.session_factory() as session:
@@ -155,4 +156,4 @@ class RoutineRepository:
                 self.upd_user_routine(user_id)
             except IntegrityError:
                 raise IntegrityError()
-            return "habit deleted"
+            return "Habit deleted"

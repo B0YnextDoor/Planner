@@ -1,5 +1,5 @@
 from contextlib import AbstractContextManager
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from sqlalchemy.exc import IntegrityError
 from typing import Callable
 from sqlalchemy.orm import Session
@@ -28,7 +28,7 @@ class OrganisationTaskRepository:
             return organisation.tasks
 
     def create_organisation_task(self, category: str, description: str, priority: str,
-                                 executors: list[int], user_id: int):
+                                 executors: str, user_id: int):
         with self.session_factory() as session:
             try:
                 db_user = session.query(User).filter(
@@ -43,18 +43,17 @@ class OrganisationTaskRepository:
                     return 'no org'
                 org_task = OrganisationTask(
                     category, description, priority, organisation.id)
-                for user in executors:
-                    org_task.executors[user] = ""
+                org_task.executors = executors
                 organisation.statistics[0].amount_of_tasks += 1
                 session.add(org_task)
                 session.commit()
                 session.refresh(org_task)
             except IntegrityError:
                 IntegrityError()
-            return org_task
+            return 'Task created'
 
-    def upd_organisation_task(self, category: str, description: str, priority: str, executors: list[int],
-                              task_id: int, user_id: int):
+    def upd_organisation_task(self, category: str, description: str | None, priority: str | None,
+                              executors: str | None, task_id: int, user_id: int):
         with self.session_factory() as session:
             try:
                 db_user = session.query(User).filter(
@@ -69,22 +68,30 @@ class OrganisationTaskRepository:
                     OrganisationTask.organisation_id == organisation.id, OrganisationTask.id == task_id).first()
                 if org_task is None:
                     return 'no task'
-                if category == 'DONE':
+                if category == 'done' and org_task.category != 'done':
                     organisation.statistics[0].amount_of_tasks -= 1
                     organisation.statistics[0].finished_tasks += 1
-                    org_task.time_spent = (datetime.now(
-                    ) - datetime.fromisoformat(org_task.time_created)).total_seconds()
+                    org_task.time_spent = (datetime.now(timezone(
+                        timedelta(hours=3))) - datetime.fromisoformat(org_task.time_created)).total_seconds() + 1
+                elif org_task.category == 'done':
+                    org_task.time_spent = 0
+                    organisation.statistics[0].amount_of_tasks += 1
+                    organisation.statistics[0].finished_tasks -= 1
+                elif category == 'in process':
+                    org_task.time_created = datetime.now(
+                        timezone(timedelta(hours=3))).isoformat()
                 org_task.category = category
-                org_task.description = description
-                org_task.priority = priority
-                org_task.executors = {}
-                for user in executors:
-                    org_task.executors[user] = ""
+                if description is not None:
+                    org_task.description = description
+                if priority is not None:
+                    org_task.priority = priority
+                if executors is not None:
+                    org_task.executors = executors
                 session.commit()
                 session.refresh(org_task)
             except IntegrityError:
                 IntegrityError()
-            return org_task
+            return 'Task updated'
 
     def del_organisation_task(self, user_id: int, task_id: int):
         with self.session_factory() as session:
@@ -101,12 +108,10 @@ class OrganisationTaskRepository:
                     OrganisationTask.organisation_id == organisation.id, OrganisationTask.id == task_id).first()
                 if org_task is None:
                     return 'no task'
-                if org_task.category == 'DONE':
-                    organisation.statistics[0].finished_tasks -= 1
-                else:
+                if org_task.category != 'done':
                     organisation.statistics[0].amount_of_tasks -= 1
                 session.delete(org_task)
                 session.commit()
             except IntegrityError:
                 IntegrityError()
-            return "task deleted"
+            return "Task deleted"

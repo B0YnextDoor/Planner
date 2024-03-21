@@ -1,11 +1,12 @@
 import cn from 'clsx'
-import { GripVertical, Loader, Trash } from 'lucide-react'
+import { GripVertical, Trash } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { Checkbox } from '@/components/ui/checkbox/Checkbox'
 import { DatePicker } from '@/components/ui/date-picker/DatePicker'
 import { TransparentInput } from '@/components/ui/input/TransparentInput'
+import { Loader } from '@/components/ui/loader/Loader'
 import { Select } from '@/components/ui/select/Select'
 
 import { ITodoTask, TypeTodoForm } from '@/types/tasks/todo/todo.types'
@@ -31,7 +32,7 @@ export const TodoTaskRow = ({ item, setItems }: IListRow) => {
 		}
 	})
 
-	useTodoListener({ watch, id: item.task_id, category: item.category })
+	useTodoListener({ watch, id: item.task_id })
 
 	const { deleteTask, isDeletePending } = useDeleteTodo()
 	return (
@@ -47,19 +48,23 @@ export const TodoTaskRow = ({ item, setItems }: IListRow) => {
 					<button aria-describedby='todo-item'>
 						<GripVertical className={styles.grip} />
 					</button>
-
-					<Controller
-						control={control}
-						name='isCompleted'
-						render={({ field: { value, onChange } }) => (
-							<Checkbox
-								onChange={onChange}
-								checked={value}
-							/>
-						)}
-					/>
-
-					<TransparentInput {...register('description')} />
+					{item.task_id && (
+						<Controller
+							control={control}
+							name='isCompleted'
+							render={({ field: { value, onChange } }) => (
+								<Checkbox
+									onChange={onChange}
+									checked={value}
+								/>
+							)}
+						/>
+					)}
+					{!watch('isCompleted') ? (
+						<TransparentInput {...register('description')} />
+					) : (
+						<span>{item.description}</span>
+					)}
 				</span>
 			</div>
 			<div>

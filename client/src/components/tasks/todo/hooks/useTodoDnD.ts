@@ -6,10 +6,8 @@ import { useUpdateTodo } from './useUpdateTodo'
 
 export const useTodoDnd = () => {
 	const { updateTask } = useUpdateTodo()
-
 	const onDragEnd = (result: DropResult) => {
 		if (!result.destination) return
-
 		const destinationColumnId = result.destination.droppableId
 
 		if (
@@ -18,10 +16,14 @@ export const useTodoDnd = () => {
 		)
 			return
 
-		if (destinationColumnId === 'completed') {
+		if (destinationColumnId === 'finished') {
 			updateTask({
 				task_id: Number(result.draggableId) ?? null,
-				category: destinationColumnId
+				category: destinationColumnId,
+				due_date: null,
+				description: null,
+				priority: null,
+				isCompleted: true
 			})
 
 			return
@@ -30,7 +32,7 @@ export const useTodoDnd = () => {
 		const newCreatedAt = FILTERS[destinationColumnId].format()
 		updateTask({
 			task_id: Number(result.draggableId) ?? null,
-			category: destinationColumnId,
+			category: 'active',
 			due_date: newCreatedAt,
 			description: null,
 			priority: null

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from core.config import configs
@@ -16,16 +16,20 @@ def hash_password(password: str | None) -> str | None:
     return pwd_context.hash(password) if password is not None else None
 
 
+def create_invitation(org_id: int):
+    return jwt.encode({'org': org_id, 'exp': datetime.now(timezone.utc) + timedelta(minutes=configs.REFRESH_TOKEN_EXPIRE_MINUTES)}, key=configs.SECRET_KEY, algorithm=configs.ALGORITHM)
+
+
 def refresh_tokens(user) -> tuple:
     if user is None:
         return None, None
     access_token = jwt.encode({'user': user.id,
                                'pro': user.is_pro,
                                'role': user.organisation_role,
-                               'exp': datetime.utcnow() + timedelta(minutes=configs.ACCESS_TOKEN_EXPIRE_MINUTES)},
+                               'exp': datetime.now(timezone.utc) + timedelta(minutes=configs.ACCESS_TOKEN_EXPIRE_MINUTES * 8)},
                               key=configs.SECRET_KEY, algorithm=configs.ALGORITHM)
     refresh_token = jwt.encode({'user': user.id,
-                                'exp':  datetime.utcnow() + timedelta(minutes=configs.REFRESH_TOKEN_EXPIRE_MINUTES)},
+                                'exp':  datetime.now(timezone.utc) + timedelta(minutes=configs.REFRESH_TOKEN_EXPIRE_MINUTES)},
                                key=configs.SECRET_KEY, algorithm=configs.ALGORITHM)
     return access_token, refresh_token
 

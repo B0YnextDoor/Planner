@@ -2,7 +2,7 @@ from schemas.tasks.task_schemas import TaskInfo
 
 
 class OrganisationTaskInfo(TaskInfo):
-    executors: list[int]
+    executors: str | None
 
 
 class OrganisationTaskUpd(OrganisationTaskInfo):

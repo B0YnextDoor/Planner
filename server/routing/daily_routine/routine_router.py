@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Cookie, Depends
-from fastapi.responses import JSONResponse
 from dependency_injector.wiring import inject, Provide
 from container.container import Container
 from core.server_exceptions import NotFoundError, ValidationError
-from schemas.daily_routine.routine_schemas import BuyUserPro, HabitBase, HabitUpdate, UpdateOrder
+from schemas.daily_routine.routine_schemas import BuyUserPro, DeleteHabit, HabitBase, HabitUpdate, UpdateOrder
 from services.daily_routine.routine_service import RoutineService
 
 
@@ -14,8 +13,8 @@ def ReturnResponse(response, text: str):
         raise ValidationError(f'{text} not found')
     elif response == 'wrong code':
         raise ValidationError(text)
-    elif response == 'no time':
-        raise ValidationError('can\'t add a habit')
+    elif response == 'no-time':
+        raise ValidationError('Can\'t add a habit')
     return response
 
 
@@ -39,7 +38,7 @@ async def get_all_habits(routine_service: RoutineService = Depends(Provide[Conta
 async def buy_user_pro(code: BuyUserPro,
                        access_token: str | None = Cookie(default=None),
                        routine_service: RoutineService = Depends(Provide[Container.routine_service])):
-    return ReturnResponse(routine_service.buy_user_pro(access_token, code.pro_code), 'wrong code')
+    return ReturnResponse(routine_service.buy_user_pro(access_token, code.pro_code), 'Wrong code')
 
 
 @routine_router.post("/user")
@@ -58,7 +57,7 @@ async def get_user_habits(access_token: str | None = Cookie(default=None),
 
 @routine_router.post("/create-user-habit")
 @inject
-async def create_user_habit(habit: HabitUpdate,
+async def create_user_habit(habit: HabitBase,
                             access_token: str | None = Cookie(default=None),
                             routine_service: RoutineService = Depends(Provide[Container.routine_service])):
     return ReturnResponse(routine_service.create_user_habit(access_token, habit.name, habit.duration, habit.color), 'habit')
@@ -83,7 +82,7 @@ async def upd_user_habit(habit: HabitUpdate,
 
 @routine_router.post("/del-user-habit")
 @inject
-async def del_user_habit(habit: HabitBase,
+async def del_user_habit(habit: DeleteHabit,
                          access_token: str | None = Cookie(default=None),
                          routine_service: RoutineService = Depends(Provide[Container.routine_service])):
     return ReturnResponse(routine_service.del_user_habit(

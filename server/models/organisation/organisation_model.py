@@ -7,12 +7,12 @@ from core.config import configs
 class Organisation(BaseModel):
     __tablename__ = "organisations"
 
-    def __init__(self, name, description):
+    def __init__(self, name: str, description: str):
         self.name = name
         self.description = description
 
     name = Column(String(20), unique=True)
-    description = Column(String)
+    description = Column(String, default=None)
 
     statistics = relationship('models.statistics.statistics_model.OrganisationStatistics',
                               backref='organisation', cascade=configs.CASCADE)

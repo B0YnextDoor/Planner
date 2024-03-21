@@ -10,6 +10,7 @@ dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
 
 export const filterTasks = (tasks: ITodoTask[] | undefined, value: string) => {
+	if (!tasks) return []
 	switch (value) {
 		case 'today':
 			return tasks?.filter(

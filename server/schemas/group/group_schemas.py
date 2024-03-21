@@ -1,13 +1,15 @@
 from pydantic import BaseModel
 
 
-class GroupInfo(BaseModel):
-    group_name: str
-    parent_group_id: int
+class ParentGroup(BaseModel):
+    parent: int
+
+
+class GroupInfo(ParentGroup):
+    group_name: str | None
 
 
 class GroupUpd(GroupInfo):
-    child_group_id: list[int]
     group_id: int
 
 

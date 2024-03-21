@@ -1,0 +1,19 @@
+.switcher {
+	@apply flex items-center gap-4 mb-5;
+}
+
+.switcher > button {
+	@apply flex items-center gap-1;
+}
+
+.info {
+	@apply flex flex-col gap-2.5 rounded-lg p-2 pt-4 bg-border/15 w-full;
+}
+
+.info > div {
+	@apply flex gap-2.5 items-center;
+}
+
+.info > div > label {
+	@apply text-[16px] text-white/60 dark:text-white ml-1.5 font-medium;
+}

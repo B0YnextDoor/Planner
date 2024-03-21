@@ -1,0 +1,27 @@
+.member {
+	@apply flex items-center justify-between rounded bg-border whitespace-nowrap py-2 px-4 w-3/4 relative;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 50%;
+}
+
+.form > form {
+	width: 80%;
+	display: flex;
+	flex-direction: column;
+}
+
+.form > form > span {
+	font-size: 16px;
+	color: #532fe0;
+	align-self: left;
+}
+
+.form > form > span::before {
+	display: inline;
+	content: '⚠ ';
+}

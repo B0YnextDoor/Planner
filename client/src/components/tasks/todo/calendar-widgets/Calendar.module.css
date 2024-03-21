@@ -34,15 +34,15 @@
 }
 
 .calendarTask.completed {
-	@apply border border-primary;
+	@apply border border-primary w-full;
 }
 
-.calendarTask.completed > div > span > input {
+.calendarTask.completed > div > span > span {
 	@apply italic line-through opacity-50;
 }
 
 .calendarTask.overdued {
-	@apply border border-red-600;
+	@apply border border-red-600 w-full;
 }
 
 .calendarTask.overdued > div > span > span {

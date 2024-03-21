@@ -1,7 +1,8 @@
 import cn from 'clsx'
-import { GripVertical, Loader, Trash } from 'lucide-react'
+import { GripVertical, Trash } from 'lucide-react'
 import { Dispatch, SetStateAction } from 'react'
 
+import { Loader } from '@/components/ui/loader/Loader'
 import { Badge } from '@/components/ui/select/Badge'
 
 import { ITodoTask } from '@/types/tasks/todo/todo.types'

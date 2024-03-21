@@ -5,6 +5,9 @@ import { X } from 'lucide-react'
 import { useState } from 'react'
 import { DayPicker, type SelectSingleEventHandler } from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
+import { toast } from 'sonner'
+
+import { getCurrentDate } from '@/components/tasks/todo/utils/todo.find'
 
 import { useOutside } from '@/hooks/useOutside'
 
@@ -28,8 +31,12 @@ export const DatePicker = ({
 	const { isShow, setIsShow, ref } = useOutside(false)
 
 	const handleDaySelect: SelectSingleEventHandler = date => {
+		const { currentDate } = getCurrentDate()
+		if (dayjs(date) < currentDate) {
+			toast.error("You can't add overdued task!")
+			return
+		}
 		const ISOdate = dayjs(date).format()
-
 		setSelected(date)
 		if (ISOdate) {
 			onChange(ISOdate)

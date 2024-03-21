@@ -8,7 +8,7 @@ import { filterTasks } from '../utils/todo.filter'
 import { todoService } from '@/services/tasks/todo/todo.service'
 
 export const useTodoTasks = () => {
-	const { data, isSuccess } = useQuery({
+	const { data, isSuccess, isLoading } = useQuery({
 		queryKey: ['todo-tasks'],
 		queryFn: () => todoService.getAll()
 	})
@@ -17,9 +17,11 @@ export const useTodoTasks = () => {
 	const [overdued, setOverdued] = useState<ITodoTask[] | undefined>()
 
 	useEffect(() => {
-		setItems(data?.data)
-		if (isSuccess && data) setOverdued(filterTasks(data.data, 'overdued'))
-	}, [data?.data, isSuccess])
+		if (isSuccess && data) {
+			setItems(data.data)
+			setOverdued(filterTasks(data.data, 'overdued'))
+		}
+	}, [data, data?.data, isSuccess, isLoading])
 
 	return { items, setItems, overdued, setOverdued }
 }

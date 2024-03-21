@@ -1,0 +1,11 @@
+.task {
+	@apply px-3 py-2 font-normal flex items-center justify-between relative rounded-lg ml-5 bg-white/5 duration-500;
+}
+
+.task.completed > span > span {
+	@apply italic line-through opacity-50;
+}
+
+.task:hover {
+	@apply bg-white/10;
+}

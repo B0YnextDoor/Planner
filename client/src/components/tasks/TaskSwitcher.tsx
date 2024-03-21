@@ -3,18 +3,20 @@
 import cn from 'clsx'
 import { CalendarDays, Kanban, ListTodo } from 'lucide-react'
 
-export type TypeView = 'list' | 'kanban' | 'calendar'
+import { ISwitcherView } from '@/types/ui/switcher/switcher.type'
 
-interface ISwitcherView {
-	type: TypeView
-	setType: (value: TypeView) => void
-}
+import styles from './Tasks.module.css'
 
-export const TaskSwitcher = ({ setType, type }: ISwitcherView) => {
+export type TypeTaskView = 'list' | 'kanban' | 'calendar'
+
+export const TaskSwitcher = ({
+	setType,
+	type
+}: ISwitcherView<TypeTaskView>) => {
 	return (
-		<div className='flex items-center gap-4 mb-5'>
+		<div className={styles.switcher}>
 			<button
-				className={cn('flex items-center gap-1', {
+				className={cn({
 					'opacity-40': type === 'kanban' || type === 'calendar'
 				})}
 				onClick={() => setType('list')}
@@ -23,7 +25,7 @@ export const TaskSwitcher = ({ setType, type }: ISwitcherView) => {
 				List
 			</button>
 			<button
-				className={cn('flex items-center gap-1', {
+				className={cn({
 					'opacity-40': type === 'list' || type == 'calendar'
 				})}
 				onClick={() => setType('kanban')}
@@ -32,7 +34,7 @@ export const TaskSwitcher = ({ setType, type }: ISwitcherView) => {
 				Board
 			</button>
 			<button
-				className={cn('flex items-center gap-1', {
+				className={cn({
 					'opacity-40': type === 'kanban' || type === 'list'
 				})}
 				onClick={() => setType('calendar')}

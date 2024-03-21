@@ -14,6 +14,7 @@ interface ISingleSelect {
 	data: IOption[]
 	onChange: (value: string) => void
 	value: string
+	view?: boolean
 	isColorSelect?: boolean
 }
 
@@ -21,15 +22,14 @@ export const Select = ({
 	data,
 	onChange,
 	value,
+	view,
 	isColorSelect
 }: ISingleSelect) => {
 	const { isShow, setIsShow, ref } = useOutside(false)
 	const getValue = () => data.find(item => item.value === value)?.value
 	return (
 		<div
-			className={cn('relative min-w-36', {
-				'w-max': isColorSelect
-			})}
+			className={cn('relative min-w-36', isColorSelect && 'w-40')}
 			ref={ref}
 		>
 			<button
@@ -53,10 +53,13 @@ export const Select = ({
 			{isShow && (
 				<div
 					className={cn(
-						'absolute w-full p-2.5 left-0 slide bg-sidebar z-10 shadow rounded-lg overflow-auto'
+						'absolute left-0 slide bg-sidebar z-10 shadow rounded-lg',
+						!view
+							? 'w-full p-2.5 overflow-auto'
+							: 'flex gap-1 items-center w-max p-2'
 					)}
 					style={{
-						top: 'calc(100% + .5rem)'
+						top: !view ? 'calc(100% + .5rem)' : '-30%'
 					}}
 				>
 					{data.map(item => (
@@ -67,7 +70,10 @@ export const Select = ({
 								onChange(item.value)
 								setIsShow(false)
 							}}
-							className='block mb-4 last:mb-0 capitalize rounded-lg'
+							className={cn(
+								'block last:mb-0 capitalize rounded-lg',
+								!view && 'mb-4'
+							)}
 							style={
 								isColorSelect
 									? {

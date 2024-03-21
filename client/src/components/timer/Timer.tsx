@@ -53,7 +53,7 @@ export const Timer = () => {
 					</div>
 				)}
 				{isLoading ? (
-					<Loader />
+					<Loader size={20} />
 				) : session?.data && isActive ? (
 					<>
 						<button

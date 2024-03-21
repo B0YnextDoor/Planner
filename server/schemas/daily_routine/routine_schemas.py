@@ -1,3 +1,4 @@
+from matplotlib.pyplot import cla
 from pydantic import BaseModel
 
 
@@ -9,14 +10,18 @@ class RoutineUpdate(BaseModel):
     sleep_time: str
 
 
-class HabitBase(BaseModel):
+class DeleteHabit(BaseModel):
     id: int
 
 
-class HabitUpdate(HabitBase):
+class HabitBase(BaseModel):
     name: str
     duration: int
-    color: str
+    color: str | None
+
+
+class HabitUpdate(HabitBase):
+    id: int
 
 
 class BuyUserPro(BaseModel):

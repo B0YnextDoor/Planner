@@ -55,7 +55,8 @@ async def upd_user_stat(statistic: UserStatistics,
 
 @statistics_router.post('/organisation-upd')
 @inject
-async def upd_user_stat(statistic: StatisticsInfo,
-                        access_token: str | None = Cookie(default=None),
-                        statistics_service: StatisticsService = Depends(Provide[Container.statistics_service])):
+async def upd_orhanisation_stat(statistic: StatisticsInfo,
+                                access_token: str | None = Cookie(
+                                    default=None),
+                                statistics_service: StatisticsService = Depends(Provide[Container.statistics_service])):
     return ReturnResponse(statistics_service.upd_organisation_stat(access_token, statistic.amount_of_tasks, statistic.finished_tasks))

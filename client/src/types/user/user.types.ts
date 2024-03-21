@@ -11,3 +11,5 @@ export interface IUserProfile extends IUserBase {
 export interface IUpdUserProfile extends IUserBase {
 	password: string | null
 }
+
+export type TypeUserForm = Partial<Omit<IUserBase, 'name'>>

@@ -1,10 +1,18 @@
-.container > form > div > div > span {
-	font-size: 16px;
-	color: #532fe0;
-	align-self: start;
+.container > div {
+	width: 100%;
+	display: flex;
+	gap: 10px;
 }
 
-.container > form > div > div > span::before {
+.container > div > div > form > span,
+.container > div > form > div > div > span {
+	font-size: 16px;
+	color: #532fe0;
+	align-self: left;
+}
+
+.container > div > div > form > span::before,
+.container > div > form > div > div > span::before {
 	display: inline;
 	content: '⚠ ';
 }

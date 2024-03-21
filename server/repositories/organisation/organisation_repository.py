@@ -24,10 +24,25 @@ class OrganisationRepository:
     def del_by_id(self, user_id: int) -> None:
         with self.session_factory() as session:
             db_user = session.query(User).filter(User.id == user_id).first()
-            session.delete(session.query(Organisation).filter(
-                Organisation.id == db_user.organisation_id).first())
+            if db_user is None:
+                return None
+            elif db_user.organisation_role != 'head':
+                return 'not head'
+            organisation = session.query(Organisation).filter(
+                Organisation.id == db_user.organisation_id).first()
+            if organisation is None:
+                return 'no org'
+            members = session.query(User).filter(
+                User.organisation_id == organisation.id).all()
+            for member in members:
+                member.organisation_id = -1
+                member.organisation_role = ""
+                if (member.id != db_user.id):
+                    Notification(
+                        "Your organisation was dissolved by the head.", member.id)
+            session.delete(organisation)
             session.commit()
-            return "success"
+            return "Organisation deleted"
 
     def get_by_name(self, name: str):
         with self.session_factory() as session:
@@ -47,15 +62,13 @@ class OrganisationRepository:
             db_user = session.query(User).filter(User.id == user_id).first()
             if db_user is None:
                 return None
-            elif db_user.organisation_role != 'head':
-                return 'not head'
             organisation = session.query(Organisation).filter(
                 Organisation.id == db_user.organisation_id).first()
             if organisation is None:
-                return 'no-org'
+                return 'no org'
             return session.query(User).filter(User.organisation_id == organisation.id).all()
 
-    def create_organisation(self, user_id: int, name: str, description: str):
+    def create_organisation(self, user_id: int, name: str, description: str | None):
         with self.session_factory() as session:
             try:
                 db_user = session.query(User).filter(
@@ -78,9 +91,9 @@ class OrganisationRepository:
                 session.refresh(organisation)
             except IntegrityError:
                 raise IntegrityError()
-            return organisation
+            return 'Organisation created'
 
-    def upd_organisation_settings(self, user_id: int, name: str, description: str):
+    def upd_organisation_settings(self, user_id: int, name: str, description: str | None):
         with self.session_factory() as session:
             try:
                 db_user = session.query(User).filter(
@@ -93,15 +106,19 @@ class OrganisationRepository:
                     Organisation.id == db_user.organisation_id).first()
                 if organisation is None:
                     return 'no org'
+                db_org = self.get_by_name(name)
+                if db_org is not None and db_org.id != organisation.id:
+                    return 'already exists'
                 organisation.name = name
-                organisation.description = description
+                if description is not None:
+                    organisation.description = description
                 session.commit()
                 session.refresh(organisation)
             except IntegrityError:
                 raise IntegrityError()
-            return organisation
+            return 'Organisation updated'
 
-    def invite_to_organisation(self, head_id: int, user_email: str, invite_code: str):
+    def invite_to_organisation(self, head_id: int, user_email: str, create_invitation):
         with self.session_factory() as session:
             try:
                 org_head = session.query(User).filter(
@@ -110,7 +127,9 @@ class OrganisationRepository:
                     return None
                 elif org_head.organisation_role != "head":
                     return 'not head'
-                elif session.query(Organisation).filter(Organisation.id == org_head.organisation_id).first() is None:
+                organisation = session.query(Organisation).filter(
+                    Organisation.id == org_head.organisation_id).first()
+                if organisation is None:
                     return 'no org'
                 new_memb = session.query(User).filter(
                     User.email == user_email).first()
@@ -119,14 +138,14 @@ class OrganisationRepository:
                 elif new_memb.organisation_role == "head" and \
                         session.query(Organisation).filter(Organisation.id == new_memb.organisation_id).first() is not None:
                     return 'head of org'
-                notification = Notification("inv",
-                                            f"Invite code: {invite_code}", new_memb.id)
+                notification = Notification(f"You was invited to organisation: {organisation.name}.", new_memb.id,
+                                            create_invitation(org_head.organisation_id))
                 session.add(notification)
                 session.commit()
                 session.refresh(notification)
             except IntegrityError:
                 raise IntegrityError()
-            return notification
+            return 'User invited'
 
     def join_organisation(self, user_id: int, invite_code: str, decode_token):
         with self.session_factory() as session:
@@ -141,11 +160,11 @@ class OrganisationRepository:
                 info = decode_token(invite_code)
                 if info is None:
                     return 'code expired'
-                org_head = session.query(User).filter(
-                    User.id == info.get('user')).first()
-                if org_head is None or org_head.organisation_id < 0:
+                organisation = session.query(Organisation).filter(
+                    User.id == info.get('org')).first()
+                if organisation is None:
                     return 'no org'
-                recrut_user.organisation_id = org_head.organisation_id
+                recrut_user.organisation_id = organisation.id
                 recrut_user.organisation_role = "memb"
                 if 9 not in recrut_user.achievements:
                     recrut_user.achievements[9] = ""
@@ -153,7 +172,7 @@ class OrganisationRepository:
                 session.refresh(recrut_user)
             except IntegrityError:
                 raise IntegrityError()
-            return recrut_user
+            return "Successfully joined"
 
     def leave_organisation(self, user_id: int):
         with self.session_factory() as session:
@@ -170,9 +189,9 @@ class OrganisationRepository:
                     if new_head is None:
                         self.del_by_id(user_id)
                     else:
-                        new_head.organisation_role == "head"
-                        notification = Notification("not",
-                                                    f"You was promoted to the head of organisation", new_head.id)
+                        new_head.organisation_role = "head"
+                        notification = Notification(
+                            "You was promoted to the head of organisation", new_head.id)
                         session.add(notification)
                         session.commit()
                         session.refresh(new_head)
@@ -182,7 +201,7 @@ class OrganisationRepository:
                 session.refresh(db_user)
             except IntegrityError:
                 raise IntegrityError()
-            return db_user
+            return 'Organisation leaved'
 
     def delete_organisation_member(self, user_id: int, member_id: int):
         with self.session_factory() as session:
@@ -203,8 +222,8 @@ class OrganisationRepository:
                     return self.leave_organisation(user_id)
                 del_member.organisation_id = -1
                 del_member.organisation_role = ""
-                notification = Notification("not",
-                                            f"You was drop out from organisation", del_member.id)
+                notification = Notification(
+                    "You was droped out from organisation", del_member.id)
                 session.add(notification)
                 session.commit()
                 session.refresh(del_member)

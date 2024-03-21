@@ -22,7 +22,7 @@ export const todoService = {
 		const { isCompleted, ...rest } = data
 		if (isCompleted) rest.category = 'finished'
 		else if (!isCompleted && rest.category == 'finished') {
-			rest.category = 'today'
+			rest.category = 'active'
 			rest.due_date = FILTERS['today'].format()
 		}
 		return await userApi.post<IResponse>(`${this.TASKS_URL}upd`, rest)

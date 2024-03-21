@@ -18,3 +18,15 @@ class NotificationRepository:
         with self.session_factory() as session:
             db_user = session.query(User).filter(User.id == user_id).first()
             return db_user.notifications if db_user is not None else None
+
+    def delete_notification(self, user_id: int, note_id: int):
+        with self.session_factory() as session:
+            db_user = session.query(User).filter(User.id == user_id).first()
+            if db_user is None:
+                return None
+            note = session.query(Notification).filter(
+                Notification.id == note_id).first()
+            if note is not None:
+                session.delete(note)
+            session.commit()
+        return 'Notification deleted'

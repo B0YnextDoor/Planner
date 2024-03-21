@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 import { ITodoTask } from '@/types/tasks/todo/todo.types'
 
@@ -15,14 +16,17 @@ export const useTodayTodos = ({ tasks, setItems, day }: ICalendarDay) => {
 	const { currentDate } = useMemo(() => getCurrentDate(), [day])
 	const [todayTasks, setTodayTasks] = useState<ITodoTask[] | undefined>(tasks)
 	const addTask = () => {
+		if (date < currentDate) {
+			toast.error("You can't add overdued task!")
+			return
+		}
 		setItems((prev: any) => {
 			if (!prev) return
-			console.log(date.format())
 			return [
 				...prev,
 				{
 					task_id: null,
-					category: date >= currentDate ? 'active' : 'overdued',
+					category: 'active',
 					description: '',
 					due_date: date.format(),
 					time_overdue: 0,

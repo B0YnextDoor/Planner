@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { IMenuItem } from '@/types/sidebar/menu_item.type'
+import { IMenuItem } from '@/types/ui/sidebar/menu_item.type'
 
 import { useProfile } from '@/hooks/useProfile'
 

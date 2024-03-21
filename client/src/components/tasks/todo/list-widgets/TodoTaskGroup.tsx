@@ -37,7 +37,7 @@ export const TodoTaskGroup = ({
 						<div className='w-full'>{label}</div>
 					</div>
 
-					{filterTasks(items, value)?.map((item, index) => (
+					{filterTasks(items, value).map((item, index) => (
 						<Draggable
 							key={index}
 							draggableId={String(item.task_id)}

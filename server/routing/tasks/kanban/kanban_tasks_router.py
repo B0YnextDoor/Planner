@@ -10,9 +10,9 @@ from services.tasks.kanban.kanban_task_service import KanbanTaskService
 
 def ReturnResponse(response):
     if response is None:
-        return NotFoundError('user not found')
+        raise NotFoundError('user not found')
     elif response == 'no task':
-        return ValidationError('task not found')
+        raise ValidationError('task not found')
     return response
 
 

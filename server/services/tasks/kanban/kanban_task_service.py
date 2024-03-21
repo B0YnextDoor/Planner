@@ -10,15 +10,34 @@ class KanbanTaskService:
         return self.kanban_tasks_repository.get_all_kanban()
 
     def get_user_kanban(self, token: str):
-        return self.kanban_tasks_repository.get_user_kanban(decode_token(token).get('user'))
+        user = decode_token(token)
+        if user is None:
+            return None
+        response = self.kanban_tasks_repository.get_user_kanban(
+            user.get('user'))
+        tasks = []
+        for task in response:
+            tasks.append({'task_id': task.id, 'category': task.category, 'description': task.description,
+                          'priority': task.priority, 'isCompleted': task.category == 'done', 'time_created': task.time_created,
+                          'time_spent': task.time_spent})
+        return tasks
 
-    def create_kanban(self, category: str, description: str, priority: str, token: str):
+    def create_kanban(self, category: str, description: str | None, priority: str | None, token: str):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.kanban_tasks_repository.create_kanban(
-            category, description, priority, decode_token(token).get('user'))
+            category, description, priority, user.get('user'))
 
-    def upd_kanban(self, category: str, description: str, priority: str, task_id: int, token: str):
+    def upd_kanban(self, category: str, description: str | None, priority: str | None, task_id: int, token: str):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.kanban_tasks_repository.upd_kanban(category, description,
-                                                       priority, task_id, decode_token(token).get('user'))
+                                                       priority, task_id, user.get('user'))
 
     def del_kanban(self, task_id: int, token: str):
-        return self.kanban_tasks_repository.del_kanban(decode_token(token).get('user'), task_id)
+        user = decode_token(token)
+        if user is None:
+            return None
+        return self.kanban_tasks_repository.del_kanban(user.get('user'), task_id)

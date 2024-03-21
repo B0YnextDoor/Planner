@@ -10,4 +10,13 @@ class NotificationService:
         return self.notification_repository.get_all()
 
     def get_user_notifications(self, token: str):
-        return self.notification_repository.get_user_notifications(decode_token(token).get('user'))
+        user = decode_token(token)
+        if user is None:
+            return None
+        return self.notification_repository.get_user_notifications(user.get('user'))
+
+    def delete_notification(self, token: str, note_id: int):
+        user = decode_token(token)
+        if user is None:
+            return None
+        return self.notification_repository.delete_notification(user.get('user'), note_id)

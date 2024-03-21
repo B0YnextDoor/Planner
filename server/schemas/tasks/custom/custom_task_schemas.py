@@ -1,17 +1,20 @@
 from pydantic import BaseModel
 
 
-class CustomTaskInfo(BaseModel):
-    description: str
-    priority: str
+class CustomTaskBase(BaseModel):
     group_id: int
 
 
+class CustomTaskInfo(CustomTaskBase):
+    description: str | None
+    priority: str | None
+
+
 class CustomTaskUpd(CustomTaskInfo):
-    category: str
+    category: str | None
     task_id: int
 
 
-class CustomTaskDel(BaseModel):
+class CustomTaskDel(CustomTaskBase):
     group_id: int
     task_id: int

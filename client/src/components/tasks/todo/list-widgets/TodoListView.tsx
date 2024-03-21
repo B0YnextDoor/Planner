@@ -42,7 +42,7 @@ export function TodoListView() {
 				</div>
 
 				<div className={styles.parentsWrapper}>
-					{CATEGORIES.slice(1).map((column, index) => (
+					{CATEGORIES.map((column, index) => (
 						<TodoTaskGroup
 							items={items}
 							label={column.label}

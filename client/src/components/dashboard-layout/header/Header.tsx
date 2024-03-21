@@ -14,17 +14,9 @@ export const Header = () => {
 		<header>
 			<div className='absolute top-big-layout right-big-layout'>
 				{isLoading ? (
-					<Loader />
+					<Loader size={20} />
 				) : (
 					<div className='flex items-center'>
-						{!data?.is_pro && (
-							<button
-								className='bg-white opacity-80 mr-8 border-none text-bg px-3 
-							     py-1 uppercase rounded-lg hover:opacity-100 transition-opacity duration-300'
-							>
-								Buy Pro
-							</button>
-						)}
 						{data?.is_pro && <Crown color='gold' />}
 						<div className='text-right mr-3 ml-3'>
 							<p className='font-bold -mb-1'>{data?.name}</p>

@@ -3,7 +3,8 @@ from fastapi.responses import JSONResponse
 from dependency_injector.wiring import inject, Provide
 from container.container import Container
 from core.server_exceptions import NotFoundError, ValidationError
-from schemas.organisation.organisation_schemas import DeleteMember, InviteUser, JoinOrganisation, OrganisationSettings
+from schemas.organisation.organisation_schemas import DeleteMember, JoinOrganisation, OrganisationSettings
+from schemas.user.user_shemas import UserBase
 from services.organisation.organisation_service import OrganisationService
 
 
@@ -13,15 +14,15 @@ def ReturnResponse(response):
     elif response == 'no org':
         raise ValidationError('organisation not found')
     elif response == 'already exists':
-        raise ValidationError('organisation already exists')
+        raise ValidationError('Organisation already exists!')
     elif response == 'not head':
         raise ValidationError('not head of organosation')
     elif response == 'head of org':
-        raise ValidationError('already in organisation')
+        raise ValidationError('User is already in organisation!')
     elif response == 'code expired':
-        raise ValidationError('invite code expired')
+        raise ValidationError('Invitation code expired!')
     elif response == 'no member':
-        raise ValidationError('can\'t delete member')
+        raise ValidationError('User not found')
     return response
 
 
@@ -42,11 +43,11 @@ async def delete_all(organisation_service:
     return organisation_service.del_all()
 
 
-@organisation_router.delete("/delete-by-id")
+@organisation_router.post("/delete-by-id")
 @inject
 async def delete_by_id(access_token: str | None = Cookie(default=None),
                        organisation_service: OrganisationService = Depends(Provide[Container.organisation_service])):
-    return organisation_service.del_by_id(access_token)
+    return ReturnResponse(organisation_service.del_by_id(access_token))
 
 
 @organisation_router.post("/get-by-user")
@@ -85,9 +86,11 @@ async def upd_organisation_settings(data: OrganisationSettings,
 
 @organisation_router.post("/invite-user")
 @inject
-async def invite_new_user(data: InviteUser, organisation_service:
+async def invite_new_user(data: UserBase,
+                          access_token: str | None = Cookie(default=None),
+                          organisation_service:
                           OrganisationService = Depends(Provide[Container.organisation_service])):
-    return ReturnResponse(organisation_service.invite_to_organisation(data.access_token, data.email, data.invite_code))
+    return ReturnResponse(organisation_service.invite_to_organisation(access_token, data.email))
 
 
 @organisation_router.post("/join")

@@ -1,0 +1,7 @@
+.notification {
+	@apply min-h-[40px] hover:bg-transparent bg-[#1a1b1b] flex items-center justify-between mt-3 px-2 py-2 w-80p rounded-xl;
+}
+
+.notification > div > button {
+	@apply opacity-50 transition-opacity hover:opacity-100;
+}

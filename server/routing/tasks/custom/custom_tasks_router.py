@@ -9,13 +9,13 @@ from services.tasks.custom.custom_task_service import CustomTaskService
 
 def ReturnResponse(response):
     if response is None:
-        return NotFoundError('user not found')
+        raise NotFoundError('user not found')
     elif response == 'no groups':
-        return ValidationError('user have no task groups')
+        raise ValidationError('user have no task groups')
     elif response == 'no group':
-        return ValidationError('group not found')
+        raise ValidationError('group not found')
     elif response == 'no task':
-        return ValidationError('task not found')
+        raise ValidationError('task not found')
     return response
 
 

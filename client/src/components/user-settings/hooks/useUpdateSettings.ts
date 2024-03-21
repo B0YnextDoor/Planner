@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
+import { toast } from 'sonner'
 
 import { IUserSettings } from '@/types/settings/settings.types'
 
@@ -10,7 +10,6 @@ export const useUpdateSettings = () => {
 	const queryClient = useQueryClient()
 
 	const handleMutation = async (data: IUserSettings) => {
-		console.log(data)
 		return await userService
 			.updProfile({
 				name: data.name,

@@ -1,9 +1,10 @@
 import cn from 'clsx'
-import { Loader, Trash } from 'lucide-react'
+import { Trash } from 'lucide-react'
 import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { TransparentInput } from '@/components/ui/input/TransparentInput'
+import { Loader } from '@/components/ui/loader/Loader'
 
 import { ITodoTask, TypeTodoForm } from '@/types/tasks/todo/todo.types'
 
@@ -27,7 +28,7 @@ export const CalendarTask = ({ item, setItems }: ICalednarTask) => {
 			priority: item.priority
 		}
 	})
-	useTodoListener({ watch, id: item.task_id, category: item.category })
+	useTodoListener({ watch, id: item.task_id })
 
 	const { deleteTask, isDeletePending } = useDeleteTodo()
 	return (
@@ -49,7 +50,11 @@ export const CalendarTask = ({ item, setItems }: ICalednarTask) => {
 		>
 			<div>
 				<span className='inline-flex items-center pl-1 w-full'>
-					<TransparentInput {...register('description')} />
+					{!watch('isCompleted') && watch('category') != 'overdued' ? (
+						<TransparentInput {...register('description')} />
+					) : (
+						<span>{item.description}</span>
+					)}
 				</span>
 			</div>
 			<div>

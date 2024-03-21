@@ -24,9 +24,9 @@ class Configs(BaseSettings):
         "SECRET_KEY", "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN: str = "access_token"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10
     REFRESH_TOKEN: str = "refresh_token"
-    REFRESH_TOKEN_EXPIRE_MINUTES: int = 24*60
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = 3*60
 
     # database
     DB: str = os.getenv("DB", "postgresql")

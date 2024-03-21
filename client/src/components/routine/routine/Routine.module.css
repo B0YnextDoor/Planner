@@ -1,0 +1,17 @@
+.block {
+	@apply rounded mb-3 p-4 relative flex items-center justify-between text-sm;
+}
+
+.block:active > .grip,
+.block:active:hover > .grip {
+	@apply opacity-100;
+}
+
+.grip {
+	@apply opacity-50 transition-opacity -ml-1 mr-0.5;
+}
+
+.grip:hover,
+.grip:active {
+	@apply opacity-100;
+}

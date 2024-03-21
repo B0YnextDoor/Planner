@@ -1,6 +1,5 @@
-from core.security import decode_token
+from core.security import decode_token, create_invitation
 from repositories.organisation.organisation_repository import OrganisationRepository
-from services.base.base_service import BaseService
 
 
 class OrganisationService:
@@ -14,35 +13,71 @@ class OrganisationService:
         return self.organisation_repository.del_all()
 
     def del_by_id(self, token: str):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.organisation_repository.del_by_id(
-            decode_token(token).get('user'))
+            user.get('user'))
 
     def get_user_organisation(self, token: str):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.organisation_repository.get_user_organisation(
-            decode_token(token).get('user'))
+            user.get('user'))
 
     def get_organisation_members(self, token: str):
-        return self.organisation_repository.get_organisation_members(decode_token(token).get('user'))
+        user = decode_token(token)
+        if user is None:
+            return None
+        response = self.organisation_repository.get_organisation_members(
+            user.get('user'))
+        if response is None or type(response) == str:
+            return response
+        members = []
+        for memb in response:
+            members.append(
+                {'id': memb.id, 'name': memb.name, 'email': memb.email, 'role': memb.organisation_role})
+        return members
 
-    def create_organisation(self, token: str, name: str, description: str):
+    def create_organisation(self, token: str, name: str, description: str | None):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.organisation_repository.create_organisation(
-            decode_token(token).get('user'), name, description)
+            user.get('user'), name, description)
 
-    def upd_organisation_settings(self, token: str, name: str, description: str):
+    def upd_organisation_settings(self, token: str, name: str, description: str | None):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.organisation_repository.upd_organisation_settings(
-            decode_token(token).get('user'), name, description)
+            user.get('user'), name, description)
 
-    def invite_to_organisation(self, token: str, email: str, invite_code: str):
-        return self.organisation_repository.invite_to_organisation(decode_token(token).get('user'), email, invite_code)
+    def invite_to_organisation(self, token: str, email: str):
+        user = decode_token(token)
+        if user is None:
+            return None
+        return self.organisation_repository.invite_to_organisation(user.get('user'),
+                                                                   email, create_invitation)
 
     def join_organisation(self, token: str, invite_code: str):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.organisation_repository.join_organisation(
-            decode_token(token).get('user'), invite_code, decode_token)
+            user.get('user'), invite_code, decode_token)
 
     def leave_organisation(self, token: str):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.organisation_repository.leave_organisation(
-            decode_token(token).get('user'))
+            user.get('user'))
 
     def delete_organisation_member(self, token: str, member_id: int):
+        user = decode_token(token)
+        if user is None:
+            return None
         return self.organisation_repository.delete_organisation_member(
-            decode_token(token).get('user'), member_id)
+            user.get('user'), member_id)

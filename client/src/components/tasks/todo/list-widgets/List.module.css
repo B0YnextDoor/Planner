@@ -45,7 +45,7 @@
 	@apply font-normal grid grid-cols-[1.4fr_.4fr_.4fr_.1fr] relative;
 }
 
-.row.completed > div > span > input {
+.row.completed > div > span > span {
 	@apply italic line-through opacity-50;
 }
 

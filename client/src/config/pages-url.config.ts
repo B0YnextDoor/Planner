@@ -4,9 +4,9 @@ class DASHBOARD {
 	HOME = this.root
 	TASKS = `${this.root}/tasks`
 	GROUPS = `${this.root}/groups`
-	ROUTINE = `${this.root}/routine`
+	ORGANISATION = `${this.root}/organisation`
 	TIMER = `${this.root}/timer`
-	HABITS = `${this.root}/habits`
+	ROUTINE = `${this.root}/routine`
 	SETTINGS = `${this.root}/settings`
 }
 
