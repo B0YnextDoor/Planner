@@ -14,16 +14,18 @@ export const Notifications = () => {
 	return (
 		<div className='whitespace-nowrap relative flex flex-col items-center w-full'>
 			<div className='text-xl font-mono mb-2'>Your notifications:</div>
-			{notifications && notifications.length > 0 ? (
-				notifications.map((note, index) => (
-					<Notification
-						note={note}
-						key={index}
-					/>
-				))
-			) : (
-				<div>You have no invitations yet</div>
-			)}
+			<div className='flex flex-col-reverse items-center w-80p'>
+				{notifications && notifications.length > 0 ? (
+					notifications.map((note, index) => (
+						<Notification
+							note={note}
+							key={index}
+						/>
+					))
+				) : (
+					<div>You have no notifications yet</div>
+				)}
+			</div>
 		</div>
 	)
 }

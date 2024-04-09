@@ -7,19 +7,15 @@ export const routineService = {
 	ROUTINE_URL: '/routine/',
 
 	async buyPro(code: IBuyPro) {
-		const response = await userApi.post<IResponse>(
-			`${this.ROUTINE_URL}buy-pro`,
-			code
-		)
-		if (response.status == 200) return response
-		else if (response.status == 422) console.log('aboba')
+		return await userApi.post<IResponse>(`/user-pro/buy-pro`, code)
 	},
 
 	async getRoutine() {
-		const response = await userApi.post<IRoutine>(
-			`${this.ROUTINE_URL}user-habits`
-		)
-		if (response.status == 200) return response
+		return await userApi.post<IRoutine>(`${this.ROUTINE_URL}user-habits`)
+	},
+
+	async refreshRoutine() {
+		return await userApi.post<IResponse>(`${this.ROUTINE_URL}clear-routine`)
 	},
 
 	async createHabit(data: TypeHabitForm) {

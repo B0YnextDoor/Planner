@@ -1,4 +1,3 @@
-from matplotlib.pyplot import cla
 from pydantic import BaseModel
 
 
@@ -6,8 +5,22 @@ class UpdateOrder(BaseModel):
     order: list[int]  # id of Habits
 
 
-class RoutineUpdate(BaseModel):
-    sleep_time: str
+class RoutineTemplate(BaseModel):
+    time: int
+    habits: list[int]
+
+
+class UpdateTemplate(BaseModel):
+    name: str
+    template_id: int
+
+
+class UpdateTemplateHabits(RoutineTemplate):
+    template_id: int
+
+
+class RoutineTemplateId(BaseModel):
+    template_id: int
 
 
 class DeleteHabit(BaseModel):

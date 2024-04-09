@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { TypeCustomGroup } from '@/types/tasks/custom/custom.types'
 
@@ -13,6 +14,7 @@ export const useCreateGroup = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['custom-groups']
 			})
+			toast.success('Task group created!')
 		}
 	})
 

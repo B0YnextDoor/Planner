@@ -7,11 +7,12 @@ from core.config import configs
 class Habit(BaseModel):
     __tablename__ = "habits"
 
-    def __init__(self, name, duration, color, routine_id):
+    def __init__(self, name: str, duration: int, color: str, routine_id: int, order: int = 999):
         self.name = name
         self.duration = duration
         self.color = color
         self.routine_id = routine_id
+        self.order = order
 
     name = Column(String)
     duration = Column(Integer, default=60)
@@ -33,4 +34,4 @@ class DailyRoutine(BaseModel):
     sleep_time = Column(Integer, default=1440)
 
     habits = relationship(
-        'Habit', backref='routine', cascade=configs.CASCADE)
+        'Habit', backref='daily_routine', cascade=configs.CASCADE)

@@ -4,7 +4,6 @@ from typing import Callable
 from sqlalchemy.orm import Session
 from models.daily_routine.daily_routine_model import DailyRoutine, Habit
 from models.user.user_model import User
-from core.config import configs
 
 
 class RoutineRepository:
@@ -18,25 +17,6 @@ class RoutineRepository:
     def get_habbits_all(self):
         with self.session_factory() as session:
             return session.query(Habit).all()
-
-    def buy_user_pro(self, id: int, pro_code: str):
-        with self.session_factory() as session:
-            try:
-                db_user = session.query(User).filter(User.id == id).first()
-                if db_user is None:
-                    return None
-                elif pro_code != configs.PRO_CODE:
-                    return 'wrong code'
-                db_user.is_pro = True
-                db_user.achievements['2'] = ""
-                daily_routine = DailyRoutine(db_user.id)
-                session.add(daily_routine)
-                session.commit()
-                session.refresh(daily_routine)
-                session.refresh(db_user)
-            except IntegrityError:
-                raise IntegrityError()
-            return 'Success'
 
     def get_user_routine(self, id: int):
         with self.session_factory() as session:
@@ -69,7 +49,8 @@ class RoutineRepository:
                     return 'no-routine'
                 elif db_user.routine[0].sleep_time - duration < 0:
                     return 'no-time'
-                habit = Habit(name, duration, color, db_user.routine[0].id)
+                habit = Habit(name, duration, color, db_user.routine[0].id, len(
+                    db_user.routine[0].habits) + 1)
                 session.add(habit)
                 session.commit()
                 self.upd_user_routine(user_id)
@@ -97,6 +78,25 @@ class RoutineRepository:
             except IntegrityError:
                 raise IntegrityError()
             return 'Routine updated'
+
+    def refresh_user_routine(self, user_id: int):
+        with self.session_factory() as session:
+            db_user = session.query(User).filter(
+                User.id == user_id).first()
+            if db_user is None or db_user.is_pro == False:
+                return None
+            if len(db_user.routine) == 0:
+                return 'no-routine'
+            try:
+                if db_user.routine[0].sleep_time < 1440:
+                    db_user.routine[0].sleep_time = 1440
+                    habits = db_user.routine[0].habits
+                    for habit in habits:
+                        session.delete(habit)
+                        session.commit()
+            except IntegrityError:
+                raise IntegrityError()
+            return 'Routine refreshed'
 
     def upd_habits_order(self, user_id: int, order: list[int]):
         with self.session_factory() as session:

@@ -31,6 +31,7 @@ export const Input = forwardRef<HTMLInputElement, InputFieldProps>(
 					type={type}
 					id={id}
 					placeholder={placeholder}
+					autoComplete='off'
 					className={`mt-2 flex w-full items-center justify-center rounded-lg border border-border bg-white/10 p-3 text-base outline-none placeholder:text-white/50 placeholder:font-normal duration-500 transition-colors focus:border-primary ${
 						disabled === true
 							? '!border-none !bg-gray-100 dark:!bg-white/5 dark:placeholder:!text-[rgba(255,255,255,0.15)]'

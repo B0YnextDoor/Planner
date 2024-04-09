@@ -38,8 +38,8 @@ class OrganisationRepository:
                 member.organisation_id = -1
                 member.organisation_role = ""
                 if (member.id != db_user.id):
-                    Notification(
-                        "Your organisation was dissolved by the head.", member.id)
+                    session.add(Notification(
+                        "Your organisation was dissolved by the head.", member.id))
             session.delete(organisation)
             session.commit()
             return "Organisation deleted"

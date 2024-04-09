@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { todoService } from '@/services/tasks/todo/todo.service'
 
@@ -12,6 +13,7 @@ export const useDeleteTodo = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['todo-tasks']
 			})
+			toast.info('Task deleted!')
 		}
 	})
 

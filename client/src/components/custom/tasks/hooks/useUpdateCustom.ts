@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { TypeCustomTask } from '@/types/tasks/custom/custom.types'
 
@@ -14,6 +15,7 @@ export const useUpdateCustom = (id?: string) => {
 			queryClient.invalidateQueries({
 				queryKey: ['custom-tasks']
 			})
+			toast.success('Task updated!')
 		}
 	})
 

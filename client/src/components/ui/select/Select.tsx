@@ -16,6 +16,7 @@ interface ISingleSelect {
 	value: string
 	view?: boolean
 	isColorSelect?: boolean
+	disabled?: boolean
 }
 
 export const Select = ({
@@ -23,19 +24,24 @@ export const Select = ({
 	onChange,
 	value,
 	view,
+	disabled,
 	isColorSelect
 }: ISingleSelect) => {
 	const { isShow, setIsShow, ref } = useOutside(false)
 	const getValue = () => data.find(item => item.value === value)?.value
 	return (
 		<div
-			className={cn('relative min-w-36', isColorSelect && 'w-40')}
+			className={cn(
+				'relative min-w-36',
+				isColorSelect && 'w-40',
+				disabled && 'cursor-default'
+			)}
 			ref={ref}
 		>
 			<button
 				onClick={e => {
 					e.preventDefault()
-					setIsShow(!isShow)
+					if (!disabled) setIsShow(!isShow)
 				}}
 			>
 				{getValue() ? (

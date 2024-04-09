@@ -20,7 +20,7 @@ export const TodoCalendarView = () => {
 			{month.map((day, index) =>
 				day ? (
 					<CalendarDay
-						day={index + 1 - monthBegin.getDay()}
+						day={index + 2 - monthBegin.getDay()}
 						tasks={monthTasks}
 						setItems={setItems}
 						key={index}

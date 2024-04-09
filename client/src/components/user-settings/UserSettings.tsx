@@ -17,6 +17,7 @@ import { useUpdateSettings } from './hooks/useUpdateSettings'
 export const UserSettings = () => {
 	const {
 		register,
+		watch,
 		handleSubmit,
 		formState: { errors },
 		reset
@@ -75,18 +76,32 @@ export const UserSettings = () => {
 								{errors?.email?.type === 'required' && (
 									<span>{errors.email?.message}</span>
 								)}
+								{errors?.email?.type === 'pattern' && (
+									<span>Wrong email pattern</span>
+								)}
 								<Input
 									id='password'
 									label='Password: '
 									placeholder='Enter password'
 									type='password'
 									{...register('password', {
-										minLength: 8
+										minLength: 8,
+										pattern: /^(?=.*[A-Z])(?=.*\d).+$/
 									})}
-									extra='mb-10'
+									extra={errors?.password ? 'mb-4' : 'mb-10'}
 								/>
 								{errors?.password?.type === 'minLength' && (
 									<span>Min password length is 8!</span>
+								)}
+								{errors?.password?.type === 'pattern' && (
+									<div className='flex flex-col gap-1 mb-2'>
+										{!/\d/.test(watch('password') ?? '') && (
+											<span>Password must contain at least 1 digit</span>
+										)}
+										{!/[A-Z]/.test(watch('password') ?? '') && (
+											<span>Password must contain at least 1 upper letter</span>
+										)}
+									</div>
 								)}
 							</div>
 

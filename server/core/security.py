@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from core.config import configs
 from schemas.token.token_schemas import Tokens
 from schemas.user.user_shemas import UserInfo
+from wonderwords import RandomSentence
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -91,3 +92,14 @@ def deleteCookie(Response):
     Response.delete_cookie(key=configs.REFRESH_TOKEN, httponly=True,
                            domain=configs.DOMAIN, secure=True, samesite='none')
     return Response
+
+
+def generateProCodes() -> list[str]:
+    codes: list[str] = list()
+    generator = RandomSentence()
+    for _ in range(10):
+        code = generator.bare_bone_with_adjective()
+        while codes in codes:
+            code = generator.bare_bone_with_adjective()
+        codes.append(code)
+    return codes

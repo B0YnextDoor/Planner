@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { kanbanService } from '@/services/tasks/kanban/kanban.service'
 
@@ -12,6 +13,7 @@ export const useDeleteKanban = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['kanban-tasks']
 			})
+			toast.info('Task deleted!')
 		}
 	})
 

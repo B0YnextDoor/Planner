@@ -16,6 +16,5 @@ export const useCreateTodo = () => {
 			})
 		}
 	})
-
 	return { createTask }
 }

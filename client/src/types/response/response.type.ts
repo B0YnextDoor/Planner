@@ -1,3 +1,3 @@
 export interface IResponse {
-	payload: boolean | string
+	payload: boolean | string | string[]
 }

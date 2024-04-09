@@ -119,7 +119,6 @@ export const OrganisationTask = ({
 				<Controller
 					control={control}
 					name='priority'
-					disabled={role != 'head'}
 					render={({ field: { value, onChange } }) => (
 						<Select
 							data={['high', 'medium', 'low'].map(item => ({
@@ -128,6 +127,7 @@ export const OrganisationTask = ({
 							}))}
 							onChange={role && role == 'head' ? onChange : () => {}}
 							value={value || ''}
+							disabled={role != 'head'}
 						/>
 					)}
 				/>

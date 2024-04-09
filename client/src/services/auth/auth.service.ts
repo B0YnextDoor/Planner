@@ -6,7 +6,11 @@ import { authApi } from '@/api/interceptors'
 export const authService = {
 	AUTH_URL: '/auth/sign-',
 	async auth(type: string, data: ISignUpForm | ISignInForm) {
-		return await authApi.post<IResponse>(`${this.AUTH_URL}${type}`, data)
+		const response = await authApi.post<IResponse>(
+			`${this.AUTH_URL}${type}`,
+			data
+		)
+		if (response.status == 200) return response
 	},
 
 	async logout() {

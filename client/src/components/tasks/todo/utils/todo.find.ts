@@ -6,7 +6,7 @@ export const getCurrentDate = () => {
 	const currentDate = dayjs().startOf('day')
 	const monthBegin = new Date(currentDate.year(), currentDate.month(), 1)
 	const monthEnd = new Date(currentDate.year(), currentDate.month() + 1, 0)
-	const month = new Array(monthBegin.getDay())
+	const month = new Array(monthBegin.getDay() - 1)
 		.fill(false)
 		.concat(new Array(monthEnd.getDate()).fill(true))
 	return { currentDate, monthBegin, monthEnd, month }

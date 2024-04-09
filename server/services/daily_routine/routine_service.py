@@ -1,6 +1,5 @@
 from core.security import decode_token
 from repositories.daily_routine.routine_repository import RoutineRepository
-from services.base.base_service import BaseService
 
 
 class RoutineService:
@@ -12,12 +11,6 @@ class RoutineService:
 
     def get_habits_all(self):
         return self.routine_repository.get_habbits_all()
-
-    def buy_user_pro(self, token: str, pro_code: str):
-        user = decode_token(token)
-        if user is None:
-            return None
-        return self.routine_repository.buy_user_pro(user.get('user'), pro_code)
 
     def get_user_routine(self, token: str):
         return self.routine_repository.get_user_routine(decode_token(token).get('user'))
@@ -53,6 +46,12 @@ class RoutineService:
 
     def upd_user_routine(self, token: str):
         return self.routine_repository.upd_user_routine(decode_token(token).get('user'))
+
+    def refresh_user_routine(self, token: str):
+        user = decode_token(token)
+        if user is None:
+            return None
+        return self.routine_repository.refresh_user_routine(user.get('user'))
 
     def upd_user_habit(self, token: str, id: int, name: str, duration: int, color: str):
         user = decode_token(token)

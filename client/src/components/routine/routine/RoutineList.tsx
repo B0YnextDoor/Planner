@@ -1,34 +1,70 @@
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { HardDriveDownload, RefreshCcw } from 'lucide-react'
+import { Dispatch, SetStateAction } from 'react'
 
 import { Loader } from '@/components/ui/loader/Loader'
 
-import { useRoutine } from '../hooks/useRoutine'
+import { IHabit } from '@/types/routine/routine.types'
+
+import { useRefreshRoutine } from '../hooks/useRefreshRoutine'
 import { useRoutineDnd } from '../hooks/useRoutineDnD'
+import { useSaveRoutine } from '../hooks/useSaveRoutine'
 import { formatTime } from '../utils/formatTime'
 
 import { Habit } from './Habit'
-import styles from './Routine.module.css'
 
-export const RoutineList = () => {
-	const { items, time, setItems, isLoading } = useRoutine()
+interface IRoutineListProps {
+	items: IHabit[] | undefined
+	time: number | undefined
+	setItems: Dispatch<SetStateAction<IHabit[] | undefined>>
+}
+
+export const RoutineList = ({ items, time, setItems }: IRoutineListProps) => {
 	const { handleDragEnd, sensors } = useRoutineDnd(items, setItems)
+	const { refreshRoutine, isPending } = useRefreshRoutine()
+	const { createTemplate, isSaving } = useSaveRoutine({ items, time })
 
-	if (isLoading) return <Loader size={20} />
-
+	if (isPending) return <Loader size={20} />
 	return (
 		<div>
+			{items && items.length > 0 && !isSaving && (
+				<div className='flex justify-end w-full mb-2'>
+					<div className='flex justify-between w-10p'>
+						<button
+							onClick={(e: any) => {
+								e.preventDefault()
+								createTemplate()
+							}}
+							className='opacity-40 hover:opacity-90 transition-opacity'
+							disabled={isSaving}
+						>
+							<HardDriveDownload size={20} />
+						</button>
+						<button
+							onClick={(e: any) => {
+								e.preventDefault()
+								refreshRoutine()
+							}}
+							className='opacity-40 hover:opacity-90 transition-opacity'
+							disabled={isPending}
+						>
+							<RefreshCcw size={20} />
+						</button>
+					</div>
+				</div>
+			)}
 			<DndContext
 				sensors={sensors}
 				collisionDetection={closestCenter}
 				onDragEnd={handleDragEnd}
 			>
-				<div className={styles.list}>
+				<div>
 					<SortableContext
 						items={items || []}
 						strategy={verticalListSortingStrategy}
 					>
-						{items?.length ? (
+						{items && items.length ? (
 							items?.map(item => (
 								<Habit
 									key={item.id}
@@ -41,10 +77,10 @@ export const RoutineList = () => {
 					</SortableContext>
 				</div>
 			</DndContext>
-			{items?.length && (
+			{items && items.length && (
 				<div>
 					{formatTime(time)}
-					for sleep
+					for rest
 				</div>
 			)}
 		</div>

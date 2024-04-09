@@ -1,6 +1,5 @@
 from datetime import datetime, timezone, timedelta
-from sqlalchemy import ForeignKey, Integer, String, Column, ARRAY, JSON
-from sqlalchemy.ext.mutable import MutableDict
+from sqlalchemy import ForeignKey, Integer, String, Column
 from database.database import BaseModel
 
 

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import {
 	ICustomGroup,
@@ -16,6 +17,7 @@ export const useUpdateGroup = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['custom-groups']
 			})
+			toast.success('Task group updated!')
 		}
 	})
 

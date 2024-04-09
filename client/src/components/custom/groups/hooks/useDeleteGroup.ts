@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { groupService } from '@/services/groups/group.service'
 
@@ -11,6 +12,7 @@ export const useDeleteGroup = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['custom-groups']
 			})
+			toast.info('Task group deleted!')
 		}
 	})
 

@@ -18,6 +18,7 @@ export const Auth = () => {
 	const ref = useRef(null)
 	const [toggle, setToggle] = useState<any>()
 	const [login, setLogin] = useState<boolean>(true)
+	const [isError, setIsError] = useState<boolean>(false)
 	const { push } = useRouter()
 	useEffect(() => {
 		setToggle(ref.current)
@@ -32,9 +33,14 @@ export const Auth = () => {
 			push(DASHBOARD_PAGES.HOME)
 		},
 		onError(error: any) {
+			setIsError(true)
 			toast.error(error?.response?.data?.detail)
 		}
 	})
+	const handleError = (e: any) => {
+		e.preventDefault()
+		setIsError(false)
+	}
 	return (
 		<div
 			className='container'
@@ -45,11 +51,15 @@ export const Auth = () => {
 				className='sign-up'
 				mutate={mutate}
 				setLogin={setLogin}
+				isError={isError}
+				handleError={handleError}
 			/>
 			<SignIn
 				className='sing-in'
 				mutate={mutate}
 				setLogin={setLogin}
+				isError={isError}
+				handleError={handleError}
 			/>
 			<ToggleContainer
 				className='toggle'

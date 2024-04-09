@@ -1,0 +1,15 @@
+.template {
+	@apply hover:bg-transparent bg-[#1a1b1b] w-full pl-4 py-2 flex items-center justify-between rounded-lg border-2 border-border duration-200;
+}
+
+.template > div > div > button {
+	@apply opacity-50 transition-opacity hover:opacity-100;
+}
+
+.template > div > div {
+	@apply flex items-center gap-2.5;
+}
+
+.template > div > div > label {
+	@apply text-[16px] text-white/60 dark:text-white ml-1.5 font-medium;
+}

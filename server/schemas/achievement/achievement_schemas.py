@@ -1,10 +1,6 @@
 from pydantic import BaseModel
 
 
-class AchievementBase(BaseModel):
-    rules_to_achive: str
-
-
-class AchievementFull(AchievementBase):
+class Achievement(BaseModel):
     description: str
     title: str

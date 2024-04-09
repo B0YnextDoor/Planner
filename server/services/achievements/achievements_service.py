@@ -10,5 +10,5 @@ class AchievementsService:
     def get_all(self):
         return self.achievements_repository.get_all()
 
-    def add_to_user(self, token: str, rule: str):
-        return self.achievements_repository.add_to_user(decode_token(token).get('user'), rule)
+    def add_achievement(self, description: str, title: str):
+        return self.achievements_repository.add_achievement(description, title)

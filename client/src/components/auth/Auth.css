@@ -54,11 +54,13 @@
 	height: 100%;
 }
 
-.container form > span {
+.container form > span,
+.container form > div > span {
 	color: #bf1650;
 }
 
-.container form > span::before {
+.container form > span::before,
+.container form > div > span::before {
 	display: inline;
 	content: '⚠ ';
 }

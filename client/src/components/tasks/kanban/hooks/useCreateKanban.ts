@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { TypeKanbanForm } from '@/types/tasks/kanban/kanban.types'
 
@@ -14,6 +15,7 @@ export const useCreateKanban = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['kanban-tasks']
 			})
+			toast.success('Task created!')
 		}
 	})
 

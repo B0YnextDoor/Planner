@@ -6,7 +6,7 @@ import type { IHabit } from '@/types/routine/routine.types'
 import { routineService } from '@/services/routine/routine.service'
 
 export const useRoutine = () => {
-	const { data, isLoading } = useQuery({
+	const { data, isLoading, isError } = useQuery({
 		queryKey: ['habits'],
 		queryFn: () => routineService.getRoutine(),
 		retry: 0
@@ -16,9 +16,13 @@ export const useRoutine = () => {
 	const [time, setTime] = useState<number | undefined>(data?.data?.time)
 
 	useEffect(() => {
+		if (isError) {
+			setItems(undefined)
+			return
+		}
 		setItems(data?.data?.habits)
 		setTime(data?.data?.time)
-	}, [data?.data])
+	}, [data?.data, isLoading, isError])
 
 	return { items, time, setItems, isLoading }
 }

@@ -13,6 +13,7 @@ export const TransparentInput = forwardRef<
 				'bg-transparent border-none focus:outline-0 focus:shadow-transparent w-full',
 				className
 			)}
+			autoComplete='off'
 			ref={ref}
 			{...rest}
 		/>

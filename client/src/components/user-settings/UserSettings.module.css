@@ -5,14 +5,16 @@
 }
 
 .container > div > div > form > span,
-.container > div > form > div > div > span {
+.container > div > form > div > div > span,
+.container > div > form > div > div > div > span {
 	font-size: 16px;
 	color: #532fe0;
 	align-self: left;
 }
 
 .container > div > div > form > span::before,
-.container > div > form > div > div > span::before {
+.container > div > form > div > div > span::before,
+.container > div > form > div > div > div > span::before {
 	display: inline;
 	content: '⚠ ';
 }

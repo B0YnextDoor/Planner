@@ -32,7 +32,12 @@ export const MultipleSelect = ({
 				padding: '10px',
 				backgroundColor: '#212224',
 				minWidth: '14rem',
-				borderRadius: 1
+				borderRadius: 1,
+				'& .css-1vqw1p-MuiSelect-select-MuiInputBase-input-MuiInput-input.Mui-disabled':
+					{
+						opacity: 1,
+						'-webkit-text-fill-color': 'rgba(255, 255, 255)'
+					}
 			}}
 			disabled={role != 'head'}
 			multiple={true}

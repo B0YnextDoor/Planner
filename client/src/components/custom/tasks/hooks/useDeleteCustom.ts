@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { customService } from '@/services/tasks/custom/custom.service'
 
@@ -18,6 +19,7 @@ export const useDeleteCustom = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['custom-tasks']
 			})
+			toast.info('Task deleted!')
 		}
 	})
 

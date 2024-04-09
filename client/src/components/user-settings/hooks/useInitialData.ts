@@ -24,6 +24,6 @@ export const useInitialData = (reset: UseFormReset<IUserSettings>) => {
 			})
 			setIsPro(data.is_pro)
 		}
-	}, [isSuccess, settingsSuccess])
+	}, [isSuccess, settingsSuccess, isLoading, data])
 	return { isLoading, isPro }
 }

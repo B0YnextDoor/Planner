@@ -1,5 +1,5 @@
 .notification {
-	@apply min-h-[40px] hover:bg-transparent bg-[#1a1b1b] flex items-center justify-between mt-3 px-2 py-2 w-80p rounded-xl;
+	@apply min-h-[40px] hover:bg-transparent bg-[#1a1b1b] flex items-center justify-between mt-3 px-2 py-2 w-full rounded-xl;
 }
 
 .notification > div > button {

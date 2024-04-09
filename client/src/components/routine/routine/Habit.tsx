@@ -8,7 +8,7 @@ import { IHabit, TypeHabitForm } from '@/types/routine/routine.types'
 import { useDeleteHabit } from '../hooks/useDeleteHabit'
 import { useRoutineSortable } from '../hooks/useRoutineSortable'
 
-import styles from './Routine.module.css'
+import styles from './RoutineList.module.css'
 
 export const Habit = ({ item }: { item: IHabit }) => {
 	const { attributes, listeners, setNodeRef, style } = useRoutineSortable(

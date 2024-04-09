@@ -1,7 +1,6 @@
 'use client'
 
 import cn from 'clsx'
-import { useEffect } from 'react'
 
 import { useProfile } from '@/hooks/useProfile'
 

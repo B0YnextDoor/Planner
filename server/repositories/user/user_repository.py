@@ -42,12 +42,12 @@ class UserRepository:
         with self.session_factory() as session:
             user = User(name=name, email=email,
                         hashed_password=hashed_password)
+            user.achievements[1] = ""
             try:
                 session.add(user)
                 session.commit()
                 session.add(TimerSettings(user.id))
                 session.add(UserStatistics(user.id))
-                user.achievements[1] = ""
                 session.commit()
                 session.refresh(user)
             except IntegrityError:
@@ -72,10 +72,12 @@ class UserRepository:
             return db_user
 
     def get_achievements(self, user_id: int):
-        ids = self.get_by_id(user_id).achievements
-        achievements = []
         with self.session_factory() as session:
+            ids = self.get_by_id(user_id).achievements
+            print(ids)
+            achievements = []
             for id in ids:
                 achievements.append(session.query(
                     Achievement).filter(Achievement.id == id).first())
+            print(achievements)
             return achievements

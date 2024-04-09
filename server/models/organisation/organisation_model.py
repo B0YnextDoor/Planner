@@ -11,7 +11,7 @@ class Organisation(BaseModel):
         self.name = name
         self.description = description
 
-    name = Column(String(20), unique=True)
+    name = Column(String, unique=True)
     description = Column(String, default=None)
 
     statistics = relationship('models.statistics.statistics_model.OrganisationStatistics',

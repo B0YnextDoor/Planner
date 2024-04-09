@@ -2,6 +2,8 @@ from dependency_injector import containers, providers
 from core.config import configs
 from database.database import Database
 from repositories.achievements.achievemets_repository import AchievementsRepository
+from repositories.daily_routine.pro_repository import ProCodeRepository
+from repositories.daily_routine.routine_template_repository import RoutineTemplateRepository
 from repositories.group.group_repository import CustomTaskGroupRepository
 from repositories.notification.notification_repository import NotificationRepository
 from repositories.organisation.organisation_repository import OrganisationRepository
@@ -15,10 +17,13 @@ from repositories.timer.timer_repository import TimerRepository
 from repositories.user.user_repository import UserRepository
 from services.achievements.achievements_service import AchievementsService
 from services.auth.auth_service import AuthService
+from services.daily_routine.pro_service import ProService
+from services.daily_routine.routine_templates_service import RoutineTemplateService
 from services.group.group_service import CustomTaskGroupService
 from services.notification.notification_service import NotificationService
 from services.organisation.organisation_service import OrganisationService
 from services.daily_routine.routine_service import RoutineService
+
 from services.statistics.statistics_service import StatisticsService
 from services.tasks.custom.custom_task_service import CustomTaskService
 from services.tasks.kanban.kanban_task_service import KanbanTaskService
@@ -36,6 +41,8 @@ class Container(containers.DeclarativeContainer):
             'routing.timer.timer_router',
             'routing.achievements.achievements_router',
             'routing.daily_routine.routine_router',
+            'routing.daily_routine.routine_template_router',
+            'routing.daily_routine.pro_router',
             'routing.statistics.statistics_router',
             'routing.organisation.organisation_router',
             'routing.notification.notification_router',
@@ -46,6 +53,7 @@ class Container(containers.DeclarativeContainer):
             'routing.group.group_router',
         ]
     )
+
     db = providers.Singleton(Database, db_url=configs.DATABASE_URI)
 
     user_repository = providers.Factory(
@@ -56,6 +64,10 @@ class Container(containers.DeclarativeContainer):
         AchievementsRepository, session_factory=db.provided.session)
     routine_repository = providers.Factory(
         RoutineRepository, session_factory=db.provided.session)
+    template_repository = providers.Factory(
+        RoutineTemplateRepository, session_factory=db.provided.session)
+    pro_repository = providers.Factory(
+        ProCodeRepository, session_factory=db.provided.session)
     statistics_repository = providers.Factory(
         StatisticsRepository, session_factory=db.provided.session)
     organisation_repository = providers.Factory(
@@ -83,6 +95,10 @@ class Container(containers.DeclarativeContainer):
         AchievementsService, achievements_repository=achievements_repository)
     routine_service = providers.Factory(
         RoutineService, routine_repository=routine_repository)
+    template_service = providers.Factory(
+        RoutineTemplateService, template_repository=template_repository)
+    pro_service = providers.Factory(
+        ProService, pro_repository=pro_repository)
     statistics_service = providers.Factory(
         StatisticsService, statistics_repository=statistics_repository)
     organisation_service = providers.Factory(

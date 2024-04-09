@@ -1,3 +1,6 @@
+import dayjs from 'dayjs'
+import { toast } from 'sonner'
+
 import { FILTERS } from '@/components/tasks/todo/utils/todo.data'
 
 import { IResponse } from '@/types/response/response.type'
@@ -15,7 +18,11 @@ export const todoService = {
 
 	async createTask(data: TypeTodoForm) {
 		const { isCompleted, task_id, ...rest } = data
-		return await userApi.post<IResponse>(`${this.TASKS_URL}add`, rest)
+		const { data: response } = await userApi.post<any[]>(
+			`${this.TASKS_URL}add`,
+			rest
+		)
+		return this.displayInfo('created', response)
 	},
 
 	async updateTask(data: TypeTodoForm) {
@@ -25,12 +32,31 @@ export const todoService = {
 			rest.category = 'active'
 			rest.due_date = FILTERS['today'].format()
 		}
-		return await userApi.post<IResponse>(`${this.TASKS_URL}upd`, rest)
+		const { data: response } = await userApi.post<any[]>(
+			`${this.TASKS_URL}upd`,
+			rest
+		)
+		return this.displayInfo('updated', response)
 	},
 
 	async deleteTask(id: number) {
 		return await userApi.post<IResponse>(`${this.TASKS_URL}del`, {
 			task_id: id
 		})
+	},
+
+	displayInfo(action: string, response: any[]) {
+		if (!response[1] && !response[2]) {
+			toast.success(`Task ${action}!`)
+			return response
+		}
+		const infoMove = response[1]
+			? `Recommended to move task on ${dayjs(response[1]).format('LL')}.`
+			: ''
+		const infoOverdued = response[2]
+			? "Don't forget to finish overdued tasks!"
+			: ''
+		toast.info(`Task ${action}! ${infoMove} ${infoOverdued}`)
+		return response
 	}
 }
