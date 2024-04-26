@@ -1,5 +1,5 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd'
-import type { Dispatch, SetStateAction } from 'react'
+import { type Dispatch, type SetStateAction } from 'react'
 
 import { ITodoTask } from '@/types/tasks/todo/todo.types'
 
@@ -37,11 +37,11 @@ export const TodoTaskGroup = ({
 						<div className='w-full'>{label}</div>
 					</div>
 
-					{filterTasks(items, value).map((item, index) => (
+					{filterTasks(items, value).map(item => (
 						<Draggable
-							key={index}
+							key={String(item.task_id)}
 							draggableId={String(item.task_id)}
-							index={index}
+							index={item.task_id}
 						>
 							{provided => (
 								<div
@@ -50,7 +50,7 @@ export const TodoTaskGroup = ({
 									{...provided.dragHandleProps}
 								>
 									<TodoTaskRow
-										key={index}
+										key={String(item.task_id)}
 										item={item}
 										setItems={setItems}
 									/>

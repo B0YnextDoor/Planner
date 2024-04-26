@@ -17,10 +17,9 @@ export const useTodoTasks = () => {
 	const [overdued, setOverdued] = useState<ITodoTask[] | undefined>()
 
 	useEffect(() => {
-		if (isSuccess && data) {
-			setItems(data.data)
-			setOverdued(filterTasks(data.data, 'overdued'))
-		}
+		if (isLoading || !isSuccess) return
+		setItems(data?.data)
+		setOverdued(filterTasks(data?.data, 'overdued'))
 	}, [data, data?.data, isSuccess, isLoading])
 
 	return { items, setItems, overdued, setOverdued }

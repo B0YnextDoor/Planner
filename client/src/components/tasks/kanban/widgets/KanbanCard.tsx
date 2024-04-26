@@ -40,11 +40,11 @@ export const KanbanCard = ({ value, label, items, setItems }: IKanbanCard) => {
 							{label}
 						</div>
 
-						{filterTasks(items, value)?.map((item, index) => (
+						{filterTasks(items, value)?.map(item => (
 							<Draggable
 								key={item.task_id}
 								draggableId={String(item.task_id)}
-								index={index}
+								index={item.task_id}
 							>
 								{provided => (
 									<div
@@ -53,7 +53,7 @@ export const KanbanCard = ({ value, label, items, setItems }: IKanbanCard) => {
 										{...provided.dragHandleProps}
 									>
 										<KanbanTask
-											key={index}
+											key={item.task_id}
 											item={item}
 											setItems={setItems}
 										/>

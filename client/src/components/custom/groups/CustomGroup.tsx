@@ -140,16 +140,16 @@ export const CustomGroup: FC<ICustomGroupComponent> = ({
 			{tasks &&
 				tasks.length > 0 &&
 				tasks.map(
-					(task, index) =>
+					task =>
 						task.group_id == group.id && (
 							<div
-								key={index}
+								key={task.id}
 								className={!isOpen ? 'hidden' : ''}
 							>
 								<CustomTask
 									task={task}
 									setTasks={setTasks}
-									key={index}
+									key={task.id}
 								/>
 							</div>
 						)
