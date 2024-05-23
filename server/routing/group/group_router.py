@@ -28,12 +28,11 @@ async def get_all(group_service: CustomTaskGroupService = Depends(Provide[Contai
     return group_service.get_all()
 
 
-@group_router.post("/user-groups")
+@group_router.get("/user-groups")
 @inject
-async def get_user_groups(parent: ParentGroup,
-                          access_token: str | None = Cookie(default=None),
+async def get_user_groups(access_token: str | None = Cookie(default=None),
                           group_service: CustomTaskGroupService = Depends(Provide[Container.group_service])):
-    return ReturnResponse(group_service.get_user_groups(access_token, parent.parent))
+    return ReturnResponse(group_service.get_user_groups(access_token, -1))
 
 
 @group_router.post("/add")
@@ -44,7 +43,7 @@ async def create_new_group(group: GroupInfo,
     return ReturnResponse(group_service.create_user_group(group.group_name, group.parent, access_token))
 
 
-@group_router.post("/upd")
+@group_router.put("/upd")
 @inject
 async def update_group(group: GroupUpd,
                        access_token: str | None = Cookie(default=None),

@@ -31,21 +31,21 @@ async def get_all_habits(routine_service: RoutineService = Depends(Provide[Conta
     return routine_service.get_habits_all()
 
 
-@routine_router.post("/user")
+@routine_router.get("/user")
 @inject
 async def get_user_routine(access_token: str | None = Cookie(default=None),
                            routine_service: RoutineService = Depends(Provide[Container.routine_service])):
     return ReturnResponse(routine_service.get_user_routine(access_token), 'routine')
 
 
-@routine_router.post("/user-habits")
+@routine_router.get("/user-habits")
 @inject
 async def get_user_habits(access_token: str | None = Cookie(default=None),
                           routine_service: RoutineService = Depends(Provide[Container.routine_service])):
     return ReturnResponse(routine_service.get_user_habits(access_token), 'habits')
 
 
-@routine_router.post("/clear-routine")
+@routine_router.delete("/clear-routine")
 @inject
 async def refresh_user_routine(access_token: str | None = Cookie(default=None),
                                routine_service: RoutineService = Depends(Provide[Container.routine_service])):
@@ -60,7 +60,7 @@ async def create_user_habit(habit: HabitBase,
     return ReturnResponse(routine_service.create_user_habit(access_token, habit.name, habit.duration, habit.color), 'habit')
 
 
-@routine_router.post('/upd_habits-order')
+@routine_router.put('/upd-habits-order')
 @inject
 async def create_user_habit(data: UpdateOrder,
                             access_token: str | None = Cookie(default=None),
@@ -68,7 +68,7 @@ async def create_user_habit(data: UpdateOrder,
     return ReturnResponse(routine_service.upd_habits_order(access_token, data.order), 'habits')
 
 
-@routine_router.post("/upd-user-habit")
+@routine_router.put("/upd-user-habit")
 @inject
 async def upd_user_habit(habit: HabitUpdate,
                          access_token: str | None = Cookie(default=None),

@@ -16,7 +16,7 @@ async def get_all(user_service: UserService = Depends(Provide[Container.user_ser
     return user_service.get_all()
 
 
-@user_router.post("/id")
+@user_router.get("/id")
 @inject
 async def get_by_id(access_token: str | None = Cookie(default=None),
                     user_service: UserService = Depends(Provide[Container.user_service])):
@@ -46,7 +46,7 @@ async def refresh_current(refresh_token: str | None = Cookie(default=None),
     return user_service.set_cookie(JSONResponse, acc_token, ref_token, True)
 
 
-@user_router.post("/upd-profile")
+@user_router.put("/upd-profile")
 @inject
 async def upd_user(user: UserCreate,
                    access_token: str | None = Cookie(default=None),
@@ -61,7 +61,7 @@ async def upd_user(user: UserCreate,
         JSONResponse, access_token, refresh_token, "Profile updated")
 
 
-@user_router.post("/profile")
+@user_router.get("/profile")
 @inject
 async def get_settings(access_token: str | None = Cookie(default=None),
                        user_service: UserService = Depends(Provide[Container.user_service])):
@@ -71,7 +71,7 @@ async def get_settings(access_token: str | None = Cookie(default=None),
     return response
 
 
-@user_router.post("/achievements")
+@user_router.get("/achievements")
 @inject
 async def get_achievements(access_token: str | None = Cookie(default=None),
                            user_service: UserService = Depends(Provide[Container.user_service])):

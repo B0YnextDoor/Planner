@@ -7,7 +7,7 @@ export const kanbanService = {
 	TASKS_URL: '/tasks/kanban/',
 
 	async getAll() {
-		const response = await userApi.post<IKanbanTask[]>(`${this.TASKS_URL}user`)
+		const response = await userApi.get<IKanbanTask[]>(`${this.TASKS_URL}user`)
 		if (response.status == 200) return response
 	},
 
@@ -21,7 +21,7 @@ export const kanbanService = {
 		if (isCompleted) rest.category = 'done'
 		else if (!isCompleted && rest.category == 'done')
 			rest.category = 'in process'
-		return await userApi.post<IResponse>(`${this.TASKS_URL}upd`, rest)
+		return await userApi.put<IResponse>(`${this.TASKS_URL}upd`, rest)
 	},
 
 	async deleteTask(id: number) {

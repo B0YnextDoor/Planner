@@ -5,12 +5,13 @@ import { TypeUserForm } from '@/types/user/user.types'
 
 import { organisationService } from '@/services/organisation/organisation.service'
 
-export const useInviteMember = () => {
+export const useInviteMember = (reset: any) => {
 	const { mutate: inviteUser, isPending } = useMutation({
 		mutationKey: ['invite member'],
 		mutationFn: (data: TypeUserForm) => organisationService.inviteUser(data),
 		onSuccess() {
 			toast.success('Invitation sent!')
+			reset()
 		},
 		onError(error: any) {
 			if (error?.response?.status == 422)

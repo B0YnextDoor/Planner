@@ -8,10 +8,9 @@ import { userApi } from '@/api/interceptors'
 export const groupService = {
 	CUSTOM_GROUP_URL: '/tasks/groups/',
 
-	async getCustomGroups(parent_id: number) {
-		const response = await userApi.post<ICustomGroup[]>(
-			`${this.CUSTOM_GROUP_URL}user-groups`,
-			{ parent: parent_id }
+	async getCustomGroups() {
+		const response = await userApi.get<ICustomGroup[]>(
+			`${this.CUSTOM_GROUP_URL}user-groups`
 		)
 		if (response.status == 200) return response
 	},
@@ -26,7 +25,7 @@ export const groupService = {
 
 	async updateCustomGroup(data: TypeCustomGroup) {
 		const { id, text, droppable, ...rest } = data
-		return await userApi.post(`${this.CUSTOM_GROUP_URL}upd`, {
+		return await userApi.put(`${this.CUSTOM_GROUP_URL}upd`, {
 			...rest,
 			group_name: text ?? null,
 			group_id: id

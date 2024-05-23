@@ -25,7 +25,7 @@ async def get_all(kanban_task_service: KanbanTaskService = Depends(Provide[Conta
     return kanban_task_service.get_all_kanban()
 
 
-@kanban_router.post("/user")
+@kanban_router.get("/user")
 @inject
 async def get_user_todo(access_token: str | None = Cookie(default=None),
                         kanban_task_service: KanbanTaskService = Depends(Provide[Container.kanban_tasks_service])):
@@ -41,7 +41,7 @@ async def create_todo(task: TaskInfo,
                                                             task.priority, access_token))
 
 
-@kanban_router.post("/upd")
+@kanban_router.put("/upd")
 @inject
 async def upd_todo(task: KanbanUpd,
                    access_token: str | None = Cookie(default=None),

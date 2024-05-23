@@ -10,7 +10,7 @@ export const organisationTaskService = {
 	ORGANISATION_TASK_URL: '/tasks/organisation/',
 
 	async getOrganisationTasks() {
-		const response = await userApi.post<IOrganisationTask[]>(
+		const response = await userApi.get<IOrganisationTask[]>(
 			`${this.ORGANISATION_TASK_URL}organisation-tasks`
 		)
 		if (response.status == 200) return response
@@ -29,7 +29,7 @@ export const organisationTaskService = {
 		if (isCompleted) rest.category = 'done'
 		else if (!isCompleted && rest.category == 'done')
 			rest.category = 'in process'
-		return await userApi.post<IResponse>(`${this.ORGANISATION_TASK_URL}upd`, {
+		return await userApi.put<IResponse>(`${this.ORGANISATION_TASK_URL}upd`, {
 			...rest
 		})
 	},

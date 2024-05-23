@@ -7,10 +7,10 @@ import { ICustomGroup } from '@/types/tasks/custom/custom.types'
 
 import { groupService } from '@/services/groups/group.service'
 
-export const useCustomGroups = (parent_id: number) => {
+export const useCustomGroups = () => {
 	const { data, isSuccess, isLoading } = useQuery({
 		queryKey: ['custom-groups'],
-		queryFn: () => groupService.getCustomGroups(parent_id),
+		queryFn: () => groupService.getCustomGroups(),
 		retry: 0
 	})
 

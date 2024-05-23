@@ -39,7 +39,7 @@ class OrganisationRepository:
                 member.organisation_role = ""
                 if (member.id != db_user.id):
                     session.add(Notification(
-                        "Your organisation was dissolved by the head.", member.id))
+                        "Your organisation was dissolved by the head", member.id))
             session.delete(organisation)
             session.commit()
             return "Organisation deleted"
@@ -161,7 +161,7 @@ class OrganisationRepository:
                 if info is None:
                     return 'code expired'
                 organisation = session.query(Organisation).filter(
-                    User.id == info.get('org')).first()
+                    Organisation.id == info.get('org')).first()
                 if organisation is None:
                     return 'no org'
                 recrut_user.organisation_id = organisation.id
@@ -195,6 +195,16 @@ class OrganisationRepository:
                         session.add(notification)
                         session.commit()
                         session.refresh(new_head)
+                else:
+                    org_head = session.query(User).filter(
+                        User.organisation_id == db_user.organisation_id, User.organisation_role == 'head').first()
+                    if org_head is None:
+                        return 'no org'
+                    notification = Notification(
+                        f'User {db_user.email} leaved your organisation', org_head.id)
+                    session.add(notification)
+                    session.commit()
+                    session.refresh(org_head)
                 db_user.organisation_id = -1
                 db_user.organisation_role = ""
                 session.commit()

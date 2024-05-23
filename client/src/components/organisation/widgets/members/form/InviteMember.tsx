@@ -12,7 +12,8 @@ export const InviteMember = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors }
+		formState: { errors },
+		reset
 	} = useForm<TypeUserForm>({
 		mode: 'onChange',
 		defaultValues: {
@@ -20,7 +21,7 @@ export const InviteMember = () => {
 		}
 	})
 
-	const { inviteUser, isPending } = useInviteMember()
+	const { inviteUser, isPending } = useInviteMember(reset)
 
 	const onSubmit: SubmitHandler<TypeUserForm> = data => inviteUser(data)
 	return (

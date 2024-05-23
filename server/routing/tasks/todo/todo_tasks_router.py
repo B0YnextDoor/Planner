@@ -25,7 +25,7 @@ async def get_all(todo_tasks_service: TodoTaskService = Depends(Provide[Containe
     return todo_tasks_service.get_all_todo()
 
 
-@todo_router.post("/user")
+@todo_router.get("/user")
 @inject
 async def get_user_todo(access_token: str | None = Cookie(default=None),
                         todo_task_service: TodoTaskService = Depends(Provide[Container.todo_tasks_sevice])):
@@ -40,7 +40,7 @@ async def create_todo(task: TodoInfo,
     return ReturnResponse(todo_task_service.create_todo(task.category, task.description, task.due_date, task.priority, access_token))
 
 
-@todo_router.post("/upd")
+@todo_router.put("/upd")
 @inject
 async def upd_todo(task: TodoUpd,
                    access_token: str | None = Cookie(default=None),

@@ -7,7 +7,7 @@ export const notificationService = {
 	NOTIFICATION_URL: '/notification/',
 
 	async getUserNotifications() {
-		const response = await userApi.post<INotificationBase[]>(
+		const response = await userApi.get<INotificationBase[]>(
 			`${this.NOTIFICATION_URL}user`
 		)
 		if (response.status == 200) return response

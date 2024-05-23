@@ -18,7 +18,7 @@ template_router = APIRouter(
     prefix='/routine/templates', tags=['daily-routine template'])
 
 
-@template_router.post('/all')
+@template_router.get('/all')
 @inject
 async def get_all_templates(access_token: str | None = Cookie(default=None),
                             template_service: RoutineTemplateService = Depends(Provide[Container.template_service])):
@@ -33,7 +33,7 @@ async def create_template(routine: RoutineTemplate,
     return ReturnResponse(template_service.create_template(routine.time, routine.habits, access_token))
 
 
-@template_router.post('/upd')
+@template_router.put('/upd')
 @inject
 async def update_template(template: UpdateTemplate,
                           access_token: str | None = Cookie(default=None),
@@ -41,7 +41,7 @@ async def update_template(template: UpdateTemplate,
     return ReturnResponse(template_service.update_template(template.name, template.template_id, access_token))
 
 
-@template_router.post('/upd-habits')
+@template_router.put('/upd-habits')
 @inject
 async def update_template_habits(template: UpdateTemplateHabits,
                                  access_token: str | None = Cookie(

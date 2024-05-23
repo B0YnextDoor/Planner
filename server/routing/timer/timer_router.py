@@ -30,14 +30,14 @@ async def get_rounds(timer_service: TimerService = Depends(Provide[Container.tim
     return timer_service.get_rounds()
 
 
-@timer_router.post("/settings")
+@timer_router.get("/settings")
 @inject
 async def get_settings(access_token: str | None = Cookie(default=None),
                        timer_service: TimerService = Depends(Provide[Container.timer_service])):
     return ReturnResponse(timer_service.get_timer_settings(access_token))
 
 
-@timer_router.post("/upd_settings")
+@timer_router.put("/upd-settings")
 @inject
 async def upd_settings(new_settings: TimerSettings,
                        access_token: str | None = Cookie(default=None),
@@ -53,7 +53,7 @@ async def create_new_session(access_token: str | None = Cookie(default=None),
     return ReturnResponse(timer_service.create_new_session(access_token))
 
 
-@timer_router.post("/upd-session")
+@timer_router.put("/upd-session")
 @inject
 async def update_session(session: UpdateSession,
                          access_token: str | None = Cookie(default=None),
@@ -61,7 +61,7 @@ async def update_session(session: UpdateSession,
     return ReturnResponse(timer_service.update_session(access_token, session.is_completed))
 
 
-@timer_router.post("/upd-round")
+@timer_router.put("/upd-round")
 @inject
 async def update_round(round: CurrentSession,
                        access_token: str | None = Cookie(default=None),
@@ -70,7 +70,7 @@ async def update_round(round: CurrentSession,
         access_token, round.current_lap, round.total_work_seconds, round.total_rest_seconds))
 
 
-@timer_router.post("/current")
+@timer_router.get("/current")
 @inject
 async def get_current_session(access_token: str | None = Cookie(default=None),
                               timer_service:

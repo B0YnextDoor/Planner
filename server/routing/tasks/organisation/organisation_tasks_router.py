@@ -30,7 +30,7 @@ async def get_all(organisation_task_service: OrganisationTaskService = Depends(P
     return organisation_task_service.get_all()
 
 
-@organisation_tasks_router.post("/organisation-tasks")
+@organisation_tasks_router.get("/organisation-tasks")
 @inject
 async def get_organisation_tasks(access_token: str | None = Cookie(default=None), organisation_task_service: OrganisationTaskService = Depends(Provide[Container.organisation_tasks_service])):
     return ReturnResponse(organisation_task_service.get_organisation_tasks(access_token))
@@ -46,7 +46,7 @@ async def create_organisation_task(task: OrganisationTaskInfo,
         task.category, task.description, task.priority, task.executors, access_token))
 
 
-@organisation_tasks_router.post("/upd")
+@organisation_tasks_router.put("/upd")
 @inject
 async def update_organisation_task(task: OrganisationTaskUpd,
                                    access_token: str | None = Cookie(

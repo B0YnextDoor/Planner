@@ -43,21 +43,21 @@ async def delete_all(organisation_service:
     return organisation_service.del_all()
 
 
-@organisation_router.post("/delete-by-id")
+@organisation_router.delete("/delete-by-id")
 @inject
 async def delete_by_id(access_token: str | None = Cookie(default=None),
                        organisation_service: OrganisationService = Depends(Provide[Container.organisation_service])):
     return ReturnResponse(organisation_service.del_by_id(access_token))
 
 
-@organisation_router.post("/get-by-user")
+@organisation_router.get("/get-by-user")
 @inject
 async def get_by_user(access_token: str | None = Cookie(default=None),
                       organisation_service: OrganisationService = Depends(Provide[Container.organisation_service])):
     return ReturnResponse(organisation_service.get_user_organisation(access_token))
 
 
-@organisation_router.post("/members")
+@organisation_router.get("/members")
 @inject
 async def get_organisation_members(access_token: str | None = Cookie(default=None),
                                    organisation_service: OrganisationService = Depends(Provide[Container.organisation_service])):
@@ -73,7 +73,7 @@ async def create_organisation(data: OrganisationSettings,
     return ReturnResponse(organisation_service.create_organisation(access_token, data.name, data.description))
 
 
-@organisation_router.post("/upd-settings")
+@organisation_router.put("/upd-settings")
 @inject
 async def upd_organisation_settings(data: OrganisationSettings,
                                     access_token: str | None = Cookie(

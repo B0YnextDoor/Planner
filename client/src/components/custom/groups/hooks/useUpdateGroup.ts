@@ -1,10 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import {
-	ICustomGroup,
-	TypeCustomGroup
-} from '@/types/tasks/custom/custom.types'
+import { TypeCustomGroup } from '@/types/tasks/custom/custom.types'
 
 import { groupService } from '@/services/groups/group.service'
 

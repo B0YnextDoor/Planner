@@ -32,13 +32,13 @@ async def get_all_user_stat(statistics_service: StatisticsService = Depends(Prov
     return statistics_service.get_all_organisation_stat()
 
 
-@statistics_router.post('/user')
+@statistics_router.get('/user')
 @inject
 async def get_user_stat(access_token: str | None = Cookie(default=None), statistics_service: StatisticsService = Depends(Provide[Container.statistics_service])):
     return ReturnResponse(statistics_service.get_user_stat(access_token))
 
 
-@statistics_router.post('/organisation')
+@statistics_router.get('/organisation')
 @inject
 async def get_organisation_stat(access_token: str | None = Cookie(default=None),
                                 statistics_service: StatisticsService = Depends(Provide[Container.statistics_service])):

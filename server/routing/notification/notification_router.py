@@ -17,7 +17,7 @@ async def get_all(notification_service: NotificationService = Depends(Provide[Co
     return notification_service.get_all()
 
 
-@notification_router.post("/user")
+@notification_router.get("/user")
 @inject
 async def get_user_notifications(access_token: str | None = Cookie(default=None),
                                  notification_service: NotificationService = Depends(Provide[Container.notification_service])):

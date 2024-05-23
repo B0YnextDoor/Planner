@@ -6,7 +6,7 @@ export const customService = {
 	CUSTOM_TASK_URL: `/tasks/groups/custom/`,
 
 	async getCustomTasks() {
-		const response = await userApi.post<ICustomTask[]>(
+		const response = await userApi.get<ICustomTask[]>(
 			`${this.CUSTOM_TASK_URL}user`
 		)
 		if (response.status == 200) return response
@@ -22,7 +22,7 @@ export const customService = {
 		if (isCompleted) rest.category = 'finished'
 		else if (!isCompleted && rest.category == 'finished')
 			rest.category = 'active'
-		return await userApi.post(`${this.CUSTOM_TASK_URL}upd`, {
+		return await userApi.put(`${this.CUSTOM_TASK_URL}upd`, {
 			...rest,
 			task_id: id
 		})

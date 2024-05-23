@@ -29,7 +29,7 @@ async def get_all(custom_task_service: CustomTaskService = Depends(Provide[Conta
     return custom_task_service.get_all()
 
 
-@custom_tasks_router.post("/user")
+@custom_tasks_router.get("/user")
 @inject
 async def get_user_tasks(access_token: str | None = Cookie(default=None),
                          custom_task_service: CustomTaskService = Depends(Provide[Container.custom_tasks_service])):
@@ -45,7 +45,7 @@ async def create_custom_task(task: CustomTaskInfo,
                                                                  access_token))
 
 
-@custom_tasks_router.post("/upd")
+@custom_tasks_router.put("/upd")
 @inject
 async def update_custom_task(task: CustomTaskUpd,
                              access_token: str | None = Cookie(default=None),

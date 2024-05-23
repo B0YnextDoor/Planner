@@ -11,17 +11,17 @@ export const timerService = {
 	},
 
 	async updateSession() {
-		return await userApi.post<IResponse>(`${this.TIMER_URL}upd-session`, {
+		return await userApi.put<IResponse>(`${this.TIMER_URL}upd-session`, {
 			is_completed: true
 		})
 	},
 
 	async currentSession() {
-		return await userApi.post<IRoundInfo>(`${this.TIMER_URL}current`)
+		return await userApi.get<IRoundInfo>(`${this.TIMER_URL}current`)
 	},
 
 	async updateRound(data: IRoundInfo) {
-		return await userApi.post(`${this.TIMER_URL}upd-round`, {
+		return await userApi.put(`${this.TIMER_URL}upd-round`, {
 			...data,
 			is_completed: false
 		})

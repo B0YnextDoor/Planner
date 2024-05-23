@@ -12,7 +12,7 @@ export const templateService = {
 	ROUTINE_URL: '/routine/templates/',
 
 	async getTemplates() {
-		const response = await userApi.post<IRoutineTemplate[]>(
+		const response = await userApi.get<IRoutineTemplate[]>(
 			`${this.ROUTINE_URL}all`
 		)
 		if (response.status == 200) return response
@@ -24,12 +24,12 @@ export const templateService = {
 	},
 
 	async updTemplate(data: IUpdateTemplate) {
-		return await userApi.post<IResponse>(`${this.ROUTINE_URL}upd`, data)
+		return await userApi.put<IResponse>(`${this.ROUTINE_URL}upd`, data)
 	},
 
 	async updTemplateHabits(data: IUpdateTemplateHabits) {
 		if (data.time < 0 || !data.habits.length) return
-		return await userApi.post<IResponse>(`${this.ROUTINE_URL}upd-habits`, data)
+		return await userApi.put<IResponse>(`${this.ROUTINE_URL}upd-habits`, data)
 	},
 
 	async delTemplate(id: number) {

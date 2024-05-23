@@ -9,7 +9,7 @@ import { useCustomGroups } from './groups/hooks/useCustomGroups'
 import { AddCustomGroup } from './utils/addCustomGroup'
 
 export const CustomTasks = () => {
-	const { groups, isLoading, setGroups } = useCustomGroups(-1)
+	const { groups, isLoading, setGroups } = useCustomGroups()
 	return (
 		<div className='w-full relative'>
 			<CustomGroups

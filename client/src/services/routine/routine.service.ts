@@ -11,11 +11,11 @@ export const routineService = {
 	},
 
 	async getRoutine() {
-		return await userApi.post<IRoutine>(`${this.ROUTINE_URL}user-habits`)
+		return await userApi.get<IRoutine>(`${this.ROUTINE_URL}user-habits`)
 	},
 
 	async refreshRoutine() {
-		return await userApi.post<IResponse>(`${this.ROUTINE_URL}clear-routine`)
+		return await userApi.delete<IResponse>(`${this.ROUTINE_URL}clear-routine`)
 	},
 
 	async createHabit(data: TypeHabitForm) {
@@ -27,19 +27,16 @@ export const routineService = {
 	},
 
 	async updateHabit(data: TypeHabitForm) {
-		return await userApi.post<IResponse>(
+		return await userApi.put<IResponse>(
 			`${this.ROUTINE_URL}upd-user-habit`,
 			data
 		)
 	},
 
 	async updateOrder(ids: number[]) {
-		return await userApi.post<IResponse>(
-			`${this.ROUTINE_URL}upd_habits-order`,
-			{
-				order: ids
-			}
-		)
+		return await userApi.put<IResponse>(`${this.ROUTINE_URL}upd-habits-order`, {
+			order: ids
+		})
 	},
 
 	async deleteHabit(id: number) {

@@ -12,7 +12,7 @@ export const organisationService = {
 	ORGANISATION_URL: '/organisation/',
 
 	async getUserOrganisation() {
-		const response = await userApi.post<IOrganisationBase>(
+		const response = await userApi.get<IOrganisationBase>(
 			`${this.ORGANISATION_URL}get-by-user`
 		)
 		if (response.status == 200) return response
@@ -24,14 +24,16 @@ export const organisationService = {
 	},
 
 	async updateOrganisation(data: TypeOrganisationForm) {
-		return await userApi.post<IResponse>(
+		return await userApi.put<IResponse>(
 			`${this.ORGANISATION_URL}upd-settings`,
 			data
 		)
 	},
 
 	async deleteOrganisation() {
-		return await userApi.post<IResponse>(`${this.ORGANISATION_URL}delete-by-id`)
+		return await userApi.delete<IResponse>(
+			`${this.ORGANISATION_URL}delete-by-id`
+		)
 	},
 
 	async joinOrganisation(invite_code: string) {
@@ -61,7 +63,7 @@ export const organisationService = {
 	},
 
 	async getOrganisationMembers() {
-		return await userApi.post<IOrganisationMember[]>(
+		return await userApi.get<IOrganisationMember[]>(
 			`${this.ORGANISATION_URL}members`
 		)
 	}

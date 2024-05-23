@@ -12,7 +12,7 @@ export const todoService = {
 	TASKS_URL: '/tasks/todo/',
 
 	async getAll() {
-		const response = await userApi.post<ITodoTask[]>(`${this.TASKS_URL}user`)
+		const response = await userApi.get<ITodoTask[]>(`${this.TASKS_URL}user`)
 		if (response.status == 200) return response
 	},
 
@@ -32,7 +32,7 @@ export const todoService = {
 			rest.category = 'active'
 			rest.due_date = FILTERS['today'].format()
 		}
-		const { data: response } = await userApi.post<any[]>(
+		const { data: response } = await userApi.put<any[]>(
 			`${this.TASKS_URL}upd`,
 			rest
 		)

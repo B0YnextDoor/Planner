@@ -8,16 +8,16 @@ export const userService = {
 	USER_URL: '/user/',
 
 	async getProfile() {
-		const response = await userApi.post<IUserProfile>(`${this.USER_URL}profile`)
+		const response = await userApi.get<IUserProfile>(`${this.USER_URL}profile`)
 		if (response.status == 200) return response.data
 	},
 
 	async updProfile(data: IUpdUserProfile) {
-		return await userApi.post<IResponse>(`${this.USER_URL}upd-profile`, data)
+		return await userApi.put<IResponse>(`${this.USER_URL}upd-profile`, data)
 	},
 
 	async getAchievements() {
-		const response = await userApi.post<IUserAchievement[]>(
+		const response = await userApi.get<IUserAchievement[]>(
 			`${this.USER_URL}achievements`
 		)
 		if (response.status == 200) return response.data

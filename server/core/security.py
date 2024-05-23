@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, timezone, UTC
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from core.config import configs
@@ -78,11 +78,11 @@ def setCookie(Response, access_token, refresh_token, content):
     response.set_cookie(key=configs.ACCESS_TOKEN, domain=configs.DOMAIN,
                         value=access_token,
                         expires=(
-                            datetime.utcnow() + timedelta(minutes=configs.ACCESS_TOKEN_EXPIRE_MINUTES)).ctime())
+                            datetime.now(UTC) + timedelta(minutes=configs.ACCESS_TOKEN_EXPIRE_MINUTES)).ctime())
     response.set_cookie(key=configs.REFRESH_TOKEN, value=refresh_token,
                         httponly=True, secure=True, samesite='none', domain=configs.DOMAIN,
                         expires=(
-                            datetime.utcnow() + timedelta(minutes=configs.REFRESH_TOKEN_EXPIRE_MINUTES)).ctime())
+                            datetime.now(UTC) + timedelta(minutes=configs.REFRESH_TOKEN_EXPIRE_MINUTES)).ctime())
     return response
 
 
