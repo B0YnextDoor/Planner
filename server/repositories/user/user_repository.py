@@ -74,10 +74,8 @@ class UserRepository:
     def get_achievements(self, user_id: int):
         with self.session_factory() as session:
             ids = self.get_by_id(user_id).achievements
-            print(ids)
             achievements = []
             for id in ids:
                 achievements.append(session.query(
                     Achievement).filter(Achievement.id == id).first())
-            print(achievements)
             return achievements

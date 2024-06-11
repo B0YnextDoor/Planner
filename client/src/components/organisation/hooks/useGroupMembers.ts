@@ -16,8 +16,9 @@ export const useGroupMembers = () => {
 	)
 
 	useEffect(() => {
-		if (data && isSuccess) setMembers(data.data)
-	}, [data?.data, isLoading, isSuccess])
+		setMembers([])
+		if (data) setMembers(data.data)
+	}, [data, isLoading, isSuccess])
 
 	return { members, isLoading }
 }

@@ -23,7 +23,6 @@ from services.group.group_service import CustomTaskGroupService
 from services.notification.notification_service import NotificationService
 from services.organisation.organisation_service import OrganisationService
 from services.daily_routine.routine_service import RoutineService
-
 from services.statistics.statistics_service import StatisticsService
 from services.tasks.custom.custom_task_service import CustomTaskService
 from services.tasks.kanban.kanban_task_service import KanbanTaskService

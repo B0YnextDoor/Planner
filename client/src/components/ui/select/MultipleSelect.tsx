@@ -1,12 +1,6 @@
-import {
-	Avatar,
-	Box,
-	Chip,
-	Input,
-	MenuItem,
-	OutlinedInput
-} from '@mui/material'
+import { Avatar, Box, Chip, Input, MenuItem } from '@mui/material'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { useEffect, useState } from 'react'
 
 import { IOrganisationMember } from '@/types/organisation/organisation.types'
 
@@ -28,6 +22,7 @@ export const MultipleSelect = ({
 	}
 	return (
 		<Select
+			key={executors ? executors : 0}
 			sx={{
 				padding: '10px',
 				backgroundColor: '#212224',

@@ -14,6 +14,7 @@ export const addCustomTask = ({
 	setTasks
 }: IAddGroupInput) => {
 	if (tasks?.find(item => !item.id)) return
+	if (!tasks) setTasks([])
 	setTasks((prev: any) => [
 		...prev,
 		{

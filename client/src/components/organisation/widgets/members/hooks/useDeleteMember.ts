@@ -11,6 +11,7 @@ export const useDeleteMember = () => {
 		mutationFn: (id: number) => organisationService.deleteUser(id),
 		onSuccess() {
 			queryClient.invalidateQueries({ queryKey: ['members'] })
+			queryClient.invalidateQueries({ queryKey: ['organisation-tasks'] })
 			toast.success('Member deleted!')
 		}
 	})

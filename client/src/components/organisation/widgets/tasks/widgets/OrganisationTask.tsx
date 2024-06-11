@@ -103,6 +103,7 @@ export const OrganisationTask = ({
 							Executors:
 						</div>
 						<Controller
+							key={members ? members.length : 0}
 							control={control}
 							name='executors'
 							render={({ field: { value, onChange } }) => (

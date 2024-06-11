@@ -5,8 +5,8 @@ import { Loader } from '@/components/ui/loader/Loader'
 
 import { IUserProfile } from '@/types/user/user.types'
 
+import { useOrganisationTasks } from '../../../hooks/useOrganisationTasks'
 import { useOrgTaskDnd } from '../hooks/useOrgTaskDnD'
-import { useOrganisationTasks } from '../hooks/useOrganisationTasks'
 import { BOARDS } from '../utils/kanban.data'
 
 import styles from './Kanban.module.css'

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/buttons/Button'
 
 import { IOrganisationPage } from '@/types/organisation/organisation.types'
 
+import { useOrganisationTasks } from '../../hooks/useOrganisationTasks'
 import { Notifications } from '../notifications/Notifications'
 
 import { useDeleteOrganisation } from './hooks/useDeleteOrganisation'
@@ -18,6 +19,7 @@ export const OrganisationDashboard = ({
 }: IOrganisationPage) => {
 	const { leaveOrganisation, isPending } = useLeaveOrganisation()
 	const { mutate, isDeletePending } = useDeleteOrganisation()
+	useOrganisationTasks()
 	return (
 		<div className='grid grid-cols-2 gap-3 w-full'>
 			<div className='flex flex-col w-full px-3 gap-10 relative'>

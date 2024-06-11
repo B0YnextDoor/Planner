@@ -1,10 +1,8 @@
-from os import access
 from typing import List
 from core.security import check_refresh_token, decode_token, get_current_user, hash_password, refresh_tokens
 from models.user.user_model import User
 from repositories.user.user_repository import UserRepository
 from schemas.token.token_schemas import Tokens
-from schemas.user.user_shemas import UserProfile
 from services.base.base_service import BaseService
 
 

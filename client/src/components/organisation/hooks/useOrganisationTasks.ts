@@ -11,13 +11,12 @@ export const useOrganisationTasks = () => {
 		queryFn: () => organisationTaskService.getOrganisationTasks()
 	})
 
-	const [items, setItems] = useState<IOrganisationTask[] | undefined>(
-		data?.data
-	)
+	const [items, setItems] = useState<IOrganisationTask[] | undefined>([])
 
 	useEffect(() => {
-		setItems(data?.data)
-	}, [data?.data, isSuccess, isLoading])
+		setItems([])
+		if (data) setItems(data.data)
+	}, [data, data?.data, isSuccess, isLoading])
 
 	return { items, setItems, isLoading }
 }

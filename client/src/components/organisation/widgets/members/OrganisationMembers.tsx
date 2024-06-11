@@ -1,8 +1,11 @@
+import { useEffect } from 'react'
+
 import { Loader } from '@/components/ui/loader/Loader'
 
 import { IUserProfile } from '@/types/user/user.types'
 
 import { useGroupMembers } from '../../hooks/useGroupMembers'
+import { useOrganisationTasks } from '../../hooks/useOrganisationTasks'
 
 import { Member } from './Member'
 import { InviteMember } from './form/InviteMember'
@@ -13,6 +16,7 @@ export const OrganisationMembers = ({
 	user: IUserProfile | undefined
 }) => {
 	const { members, isLoading } = useGroupMembers()
+	useOrganisationTasks()
 	if (isLoading) return <Loader size={20} />
 	return (
 		<div className='flex p-3 gap-2.5 w-full'>

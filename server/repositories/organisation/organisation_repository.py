@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from models.notification.notification_model import Notification
 from models.organisation.organisation_model import Organisation
 from models.statistics.statistics_model import OrganisationStatistics
+from models.tasks.organisation_task_model import OrganisationTask
 from models.user.user_model import User
 
 
@@ -205,6 +206,25 @@ class OrganisationRepository:
                     session.add(notification)
                     session.commit()
                     session.refresh(org_head)
+                org_tasks = session.query(OrganisationTask).filter(
+                    OrganisationTask.organisation_id == db_user.organisation_id).all()
+                if org_tasks is not None:
+                    for task in org_tasks:
+                        executors = task.executors.split(',')
+                        if db_user.email in executors:
+                            executors.remove(db_user.email)
+                            if len(executors) > 0:
+                                task.executors = ",".join(executors)
+                                session.commit()
+                                session.refresh(task)
+                            else:
+                                if task.category != 'done':
+                                    organisation = session.query(Organisation).filter(
+                                        Organisation.id == task.organisation_id).first()
+                                    if organisation is not None:
+                                        organisation.statistics[0].amount_of_tasks -= 1
+                                session.delete(task)
+                                session.commit()
                 db_user.organisation_id = -1
                 db_user.organisation_role = ""
                 session.commit()
@@ -230,6 +250,25 @@ class OrganisationRepository:
                     return 'no member'
                 elif del_member == db_user:
                     return self.leave_organisation(user_id)
+                org_tasks = session.query(OrganisationTask).filter(
+                    OrganisationTask.organisation_id == db_user.organisation_id).all()
+                if org_tasks is not None:
+                    for task in org_tasks:
+                        executors = task.executors.split(',')
+                        if del_member.email in executors:
+                            executors.remove(del_member.email)
+                            if len(executors) > 0:
+                                task.executors = ",".join(executors)
+                                session.commit()
+                                session.refresh(task)
+                            else:
+                                if task.category != 'done':
+                                    organisation = session.query(Organisation).filter(
+                                        Organisation.id == task.organisation_id).first()
+                                    if organisation is not None:
+                                        organisation.statistics[0].amount_of_tasks -= 1
+                                session.delete(task)
+                                session.commit()
                 del_member.organisation_id = -1
                 del_member.organisation_role = ""
                 notification = Notification(
@@ -239,4 +278,4 @@ class OrganisationRepository:
                 session.refresh(del_member)
             except IntegrityError:
                 raise IntegrityError()
-            return del_member
+            return "Member deleted"
