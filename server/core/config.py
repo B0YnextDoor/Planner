@@ -45,5 +45,3 @@ class Configs(BaseSettings):
 
 
 configs = Configs()
-
-print(configs.DATABASE_URI)
